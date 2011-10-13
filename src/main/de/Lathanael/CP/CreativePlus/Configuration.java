@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import be.Balor.Tools.ACLogger;
+import be.Balor.Tools.Debug.ACLogger;
 import be.Balor.Tools.Configuration.ExtendedConfiguration;
 
 /**
