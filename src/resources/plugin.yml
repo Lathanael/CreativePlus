@@ -1,7 +1,7 @@
 name: CreativePlus
 main: de.Lathanael.CP.CreativePlus.CreativePlus
 version: ${project.version} (BUILD ${git.build.time})
-auhor: Lathanael
+author: Lathanael
 depend: [AdminCmd]
 description: >
              Enhancments to the standard MC Creative mode.
