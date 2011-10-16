@@ -227,7 +227,7 @@
     <dependency>
         <groupId>be.Balor</groupId>
         <artifactId>AdminCmd</artifactId>
-        <version>5.9.2-SNAPSHOT</version>
+        <version>5.10.0-SNAPSHOT</version>
         <type>jar</type>
         <scope>provided</scope>
     </dependency>
