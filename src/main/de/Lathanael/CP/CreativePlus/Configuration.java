@@ -24,7 +24,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import be.Balor.Tools.Debug.ACLogger;
-import be.Balor.Tools.Configuration.ExtendedConfiguration;
+import be.Balor.Tools.Configuration.File.ExtendedConfiguration;
 
 /**
  * @authors Lathanael, Balor
@@ -48,13 +48,16 @@ public class Configuration {
 	public void setInstance(CreativePlus instance) {
 		String directory = instance.getDataFolder().getPath();
 		File file = createConfFile(directory, "config.yml");
-		pluginConfig = new ExtendedConfiguration(file);
-		pluginConfig.load();
-		pluginConfig.addProperty("CreativeWorlds", Arrays.asList("Creative1", "Creative2"));
-		pluginConfig.addProperty("PlayersCanDropItems", false);
-		pluginConfig.addProperty("BlockBreakBlacklist", Arrays.asList(7, 54, 63, 64, 68, 69, 71, 77, 93, 94, 96));
-		pluginConfig.addProperty("BlockPlaceBlacklist", Arrays.asList(7, 8, 9, 10, 11));
-		pluginConfig.save();
+		pluginConfig = ExtendedConfiguration.loadConfiguration(file);
+		pluginConfig.add("CreativeWorlds", Arrays.asList("Creative1", "Creative2"));
+		pluginConfig.add("PlayersCanDropItems", false);
+		pluginConfig.add("BlockBreakBlacklist", Arrays.asList(7, 54, 63, 64, 68, 69, 71, 77, 93, 94, 96));
+		pluginConfig.add("BlockPlaceBlacklist", Arrays.asList(7, 8, 9, 10, 11));
+		try {
+			pluginConfig.save();
+		} catch(IOException exception) {
+			exception.printStackTrace();
+		}
 	}
 
 	/**
@@ -103,8 +106,9 @@ public class Configuration {
 	 * @param path
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	public List<Integer> getConfIntList(String path) {
-		return pluginConfig.getIntList(path, new ArrayList<Integer>());
+		return (List<Integer>) pluginConfig.getList(path, new ArrayList<Integer>());
 	}
 
 	/**
@@ -113,8 +117,9 @@ public class Configuration {
 	 * @param path
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	public List<String> getConfStringList(String path) {
-		return pluginConfig.getStringList(path, new ArrayList<String>());
+		return (List<String>) pluginConfig.getList(path, new ArrayList<String>());
 	}
 
 	/**
@@ -126,8 +131,12 @@ public class Configuration {
 	 *             The value of the node
 	 */
 	public void setConfProperty(String path, Object obj) {
-		pluginConfig.setProperty(path, obj);
-		pluginConfig.save();
+		pluginConfig.set(path, obj);
+		try {
+			pluginConfig.save();
+		} catch(IOException exception) {
+			exception.printStackTrace();
+		}
 	}
 
 	/**
