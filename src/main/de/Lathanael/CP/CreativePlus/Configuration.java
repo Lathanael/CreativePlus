@@ -106,9 +106,8 @@ public class Configuration {
 	 * @param path
 	 * @return
 	 */
-	@SuppressWarnings("unchecked")
 	public List<Integer> getConfIntList(String path) {
-		return (List<Integer>) pluginConfig.getList(path, new ArrayList<Integer>());
+		return pluginConfig.getIntList(path, new ArrayList<Integer>());
 	}
 
 	/**
@@ -117,9 +116,8 @@ public class Configuration {
 	 * @param path
 	 * @return
 	 */
-	@SuppressWarnings("unchecked")
 	public List<String> getConfStringList(String path) {
-		return (List<String>) pluginConfig.getList(path, new ArrayList<String>());
+		return pluginConfig.getStringList(path, new ArrayList<String>());
 	}
 
 	/**
