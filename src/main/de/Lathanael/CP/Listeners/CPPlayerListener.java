@@ -18,10 +18,12 @@
 package de.Lathanael.CP.Listeners;
 
 import org.bukkit.GameMode;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerDropItemEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerListener;
-
 import de.Lathanael.CP.CreativePlus.Configuration;
 import de.Lathanael.CP.CreativePlus.CreativePlus;
 
@@ -34,7 +36,7 @@ import be.Balor.Tools.Utils;
  */
 public class CPPlayerListener extends PlayerListener {
 
-	public void onPlayerDropItem (PlayerDropItemEvent event) {
+	public void onPlayerDropItem(PlayerDropItemEvent event) {
 		if (event.isCancelled())
 			return;
 		Player player = event.getPlayer();
@@ -50,4 +52,15 @@ public class CPPlayerListener extends PlayerListener {
 		Utils.sI18n(player, "NoItemsDrop");
 	}
 
+	public void onPlayerInteract(PlayerInteractEvent event) {
+		if (event.isCancelled())
+			return;
+		Player player = event.getPlayer();
+		if (event.getAction().equals(Action.RIGHT_CLICK_BLOCK) || event.getAction().equals(Action.LEFT_CLICK_BLOCK)) {
+			Material mat = event.getClickedBlock().getType();
+			if (mat.equals(Material.CHEST) && !PermissionManager.hasPerm(player, "admincmd.creativeplus.chest.allowed")) {
+				event.setCancelled(true);
+			}
+		}
+	}
 }

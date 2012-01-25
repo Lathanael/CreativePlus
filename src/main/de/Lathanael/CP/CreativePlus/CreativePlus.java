@@ -61,6 +61,7 @@ public class CreativePlus extends AbstractAdminCmdPlugin{
 		//pm.registerEvent(Type.BLOCK_DAMAGE, cpBL, Priority.Monitor, this);
 		pm.registerEvent(Type.BLOCK_BREAK, cpBL, Priority.Highest, this);
 		pm.registerEvent(Type.BLOCK_PLACE, cpBL, Priority.Highest, this);
+		pm.registerEvent(Type.PLAYER_INTERACT, cpPL, Priority.Highest, this);
 		PluginDescriptionFile pdfFile = this.getDescription();
 		permissionLinker.registerAllPermParent();
 		worlds = config.getConfStringList("CreativeWorlds");
@@ -86,6 +87,7 @@ public class CreativePlus extends AbstractAdminCmdPlugin{
 		permissionLinker.addPermChild("admincmd.creativeplus.dropitems");
 		permissionLinker.addPermChild("admincmd.creativeplus.breakbl");
 		permissionLinker.addPermChild("admincmd.creativeplus.placebl");
+		permissionLinker.addPermChild("admincmd.creativeplus.chest.allowed");
 	}
 
 	@Override
