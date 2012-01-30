@@ -22,8 +22,10 @@ import java.util.HashMap;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.block.BlockListener;
 import org.bukkit.event.block.BlockPlaceEvent;
 
 import be.Balor.Manager.Permissions.PermissionManager;
@@ -35,8 +37,9 @@ import de.Lathanael.CP.CreativePlus.CreativePlus;
  * @author Lathanael (aka Philippe Leipold)
  *
  */
-public class CPBlockListener extends BlockListener {
+public class CPBlockListener implements Listener {
 
+	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onBlockPlace(BlockPlaceEvent event) {
 		if (event.isCancelled())
 			return;
@@ -56,6 +59,7 @@ public class CPBlockListener extends BlockListener {
 		Utils.sI18n(player, "blacklisted", replace);
 	}
 
+	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onBlockBreak(BlockBreakEvent event) {
 		if (event.isCancelled())
 			return;

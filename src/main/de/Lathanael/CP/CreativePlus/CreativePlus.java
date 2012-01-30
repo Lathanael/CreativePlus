@@ -20,8 +20,6 @@ package de.Lathanael.CP.CreativePlus;
 import java.util.List;
 
 import org.bukkit.ChatColor;
-import org.bukkit.event.Event.Priority;
-import org.bukkit.event.Event.Type;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 
@@ -40,9 +38,6 @@ import be.Balor.bukkit.AdminCmd.AbstractAdminCmdPlugin;
 public class CreativePlus extends AbstractAdminCmdPlugin{
 
 	private Configuration config;
-	private static CPPlayerListener cpPL = new CPPlayerListener();
-	private static CPBlockListener cpBL = new CPBlockListener();
-	private static PluginManager pm;
 	public static List<String> worlds;
 	public static List<Integer> blBreak;
 	public static List<Integer> blPlace;
@@ -56,12 +51,9 @@ public class CreativePlus extends AbstractAdminCmdPlugin{
 		super.onEnable();
 		config = Configuration.getInstance();
 		config.setInstance(this);
-		pm = getServer().getPluginManager();
-		pm.registerEvent(Type.PLAYER_DROP_ITEM, cpPL, Priority.Highest, this);
-		//pm.registerEvent(Type.BLOCK_DAMAGE, cpBL, Priority.Monitor, this);
-		pm.registerEvent(Type.BLOCK_BREAK, cpBL, Priority.Highest, this);
-		pm.registerEvent(Type.BLOCK_PLACE, cpBL, Priority.Highest, this);
-		pm.registerEvent(Type.PLAYER_INTERACT, cpPL, Priority.Highest, this);
+		final PluginManager pm = getServer().getPluginManager();
+		pm.registerEvents(new CPPlayerListener(), this);
+		pm.registerEvents(new CPBlockListener(), this);
 		PluginDescriptionFile pdfFile = this.getDescription();
 		permissionLinker.registerAllPermParent();
 		worlds = config.getConfStringList("CreativeWorlds");

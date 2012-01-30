@@ -20,10 +20,12 @@ package de.Lathanael.CP.Listeners;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerListener;
 import de.Lathanael.CP.CreativePlus.Configuration;
 import de.Lathanael.CP.CreativePlus.CreativePlus;
 
@@ -34,8 +36,9 @@ import be.Balor.Tools.Utils;
  * @author Lathanael (aka Philippe Leipold)
  *
  */
-public class CPPlayerListener extends PlayerListener {
+public class CPPlayerListener implements Listener {
 
+	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onPlayerDropItem(PlayerDropItemEvent event) {
 		if (event.isCancelled())
 			return;
@@ -52,6 +55,7 @@ public class CPPlayerListener extends PlayerListener {
 		Utils.sI18n(player, "NoItemsDrop");
 	}
 
+	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onPlayerInteract(PlayerInteractEvent event) {
 		if (event.isCancelled())
 			return;
