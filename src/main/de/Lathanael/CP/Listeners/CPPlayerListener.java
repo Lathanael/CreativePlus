@@ -19,12 +19,16 @@ package de.Lathanael.CP.Listeners;
 
 import org.bukkit.GameMode;
 import org.bukkit.Material;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.PoweredMinecart;
+import org.bukkit.entity.StorageMinecart;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerDropItemEvent;
+import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import de.Lathanael.CP.CreativePlus.Configuration;
 import de.Lathanael.CP.CreativePlus.CreativePlus;
@@ -60,11 +64,25 @@ public class CPPlayerListener implements Listener {
 		if (event.isCancelled())
 			return;
 		Player player = event.getPlayer();
-		if (event.getAction().equals(Action.RIGHT_CLICK_BLOCK) || event.getAction().equals(Action.LEFT_CLICK_BLOCK)) {
+		if (event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
 			Material mat = event.getClickedBlock().getType();
-			if (mat.equals(Material.CHEST) && !PermissionManager.hasPerm(player, "admincmd.creativeplus.chest.allowed")) {
+			if ((mat.equals(Material.CHEST) || mat.equals(Material.DISPENSER) || mat.equals(Material.BREWING_STAND)
+					|| mat.equals(Material.WORKBENCH) || mat.equals(Material.BURNING_FURNACE)
+					|| mat.equals(Material.FURNACE) || mat.equals(Material.ENCHANTMENT_TABLE))
+					&& !PermissionManager.hasPerm(player, "admincmd.creativeplus.storage.allowed")) {
 				event.setCancelled(true);
 			}
 		}
+	}
+
+	@EventHandler(priority = EventPriority.HIGHEST)
+	public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
+		if (event.isCancelled())
+			return;
+		Player player = event.getPlayer();
+		Entity clicked = event.getRightClicked();
+		if ((clicked instanceof StorageMinecart || clicked instanceof PoweredMinecart)
+				&& !PermissionManager.hasPerm(player, "admincmd.creativeplus.storage.allowed"))
+			event.setCancelled(true);
 	}
 }
