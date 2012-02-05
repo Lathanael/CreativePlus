@@ -149,7 +149,7 @@ public class Configuration {
 			}
 			catch (IOException ex){
 				ACPluginManager.getPluginInstance("CreativePlus").getLogger()
-					.info("[CreativePlus] Could not create file: " + name);
+					.info("Could not create file: " + name);
 			}
 		}
 		return file;
