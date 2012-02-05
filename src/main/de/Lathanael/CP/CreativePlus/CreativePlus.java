@@ -28,7 +28,6 @@ import de.Lathanael.CP.Listeners.CPPlayerListener;
 
 import be.Balor.Manager.Permissions.PermParent;
 import be.Balor.Tools.Utils;
-import be.Balor.Tools.Debug.ACLogger;
 import be.Balor.bukkit.AdminCmd.AbstractAdminCmdPlugin;
 
 /**
@@ -59,7 +58,7 @@ public class CreativePlus extends AbstractAdminCmdPlugin{
 		worlds = config.getConfStringList("CreativeWorlds");
 		blBreak = config.getConfIntList("BlockBreakBlacklist");
 		blPlace = config.getConfIntList("BlockPlaceBlacklist");
-		ACLogger.info("[" + pdfFile.getName() +"] Enabled. (Version " + pdfFile.getVersion() + ")");
+		getLogger().info("Enabled. (Version " + pdfFile.getVersion() + ")");
 	}
 
 	/*
@@ -69,7 +68,7 @@ public class CreativePlus extends AbstractAdminCmdPlugin{
 	 */
 	public void onDisable() {
 		PluginDescriptionFile pdfFile = this.getDescription();
-		ACLogger.info("[" + pdfFile.getName() +"] Disabled. (Version " + pdfFile.getVersion() + ")");
+		getLogger().info("Disabled. (Version " + pdfFile.getVersion() + ")");
 	}
 
 	@Override

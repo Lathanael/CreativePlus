@@ -23,8 +23,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import be.Balor.Tools.Debug.ACLogger;
 import be.Balor.Tools.Configuration.File.ExtendedConfiguration;
+import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 /**
  * @authors Lathanael, Balor
@@ -148,7 +148,8 @@ public class Configuration {
 				file.createNewFile();
 			}
 			catch (IOException ex){
-				ACLogger.info("[CreativePlus] Could not create file: " + name);
+				ACPluginManager.getPluginInstance("CreativePlus").getLogger()
+					.info("[CreativePlus] Could not create file: " + name);
 			}
 		}
 		return file;
