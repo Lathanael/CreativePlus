@@ -32,7 +32,6 @@ import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import de.Lathanael.CP.CreativePlus.Configuration;
 import de.Lathanael.CP.CreativePlus.CreativePlus;
-
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Tools.Utils;
 

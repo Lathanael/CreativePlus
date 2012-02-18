@@ -24,7 +24,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import be.Balor.Tools.Configuration.File.ExtendedConfiguration;
-import be.Balor.bukkit.AdminCmd.ACPluginManager;
 
 /**
  * @authors Lathanael, Balor
@@ -53,6 +52,7 @@ public class Configuration {
 		pluginConfig.add("PlayersCanDropItems", false);
 		pluginConfig.add("BlockBreakBlacklist", Arrays.asList(7, 54, 63, 64, 68, 69, 71, 77, 93, 94, 96));
 		pluginConfig.add("BlockPlaceBlacklist", Arrays.asList(7, 8, 9, 10, 11));
+		pluginConfig.add("SeperateInventories", true);
 		try {
 			pluginConfig.save();
 		} catch(IOException exception) {
@@ -148,8 +148,7 @@ public class Configuration {
 				file.createNewFile();
 			}
 			catch (IOException ex){
-				ACPluginManager.getPluginInstance("CreativePlus").getLogger()
-					.info("Could not create file: " + name);
+				CreativePlus.log.info("Could not create file: " + name);
 			}
 		}
 		return file;

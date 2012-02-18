@@ -18,16 +18,20 @@
 package de.Lathanael.CP.CreativePlus;
 
 import java.util.List;
+import java.util.logging.Logger;
 
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 
+import de.Lathanael.CP.Inventory.InventoryHandler;
 import de.Lathanael.CP.Listeners.CPBlockListener;
+import de.Lathanael.CP.Listeners.CPInventoryListener;
 import de.Lathanael.CP.Listeners.CPPlayerListener;
 
 import be.Balor.Manager.Permissions.PermParent;
 import be.Balor.Tools.Utils;
+import be.Balor.bukkit.AdminCmd.ACPluginManager;
 import be.Balor.bukkit.AdminCmd.AbstractAdminCmdPlugin;
 
 /**
@@ -40,6 +44,8 @@ public class CreativePlus extends AbstractAdminCmdPlugin{
 	public static List<String> worlds;
 	public static List<Integer> blBreak;
 	public static List<Integer> blPlace;
+	public static boolean sepInv;
+	public static Logger log;
 
 	public CreativePlus() {
 		super("CreativePlus");
@@ -48,6 +54,7 @@ public class CreativePlus extends AbstractAdminCmdPlugin{
 	@Override
 	public void onEnable() {
 		super.onEnable();
+		log = ACPluginManager.getPluginInstance("CreativePlus").getLogger();
 		config = Configuration.getInstance();
 		config.setInstance(this);
 		final PluginManager pm = getServer().getPluginManager();
@@ -58,7 +65,12 @@ public class CreativePlus extends AbstractAdminCmdPlugin{
 		worlds = config.getConfStringList("CreativeWorlds");
 		blBreak = config.getConfIntList("BlockBreakBlacklist");
 		blPlace = config.getConfIntList("BlockPlaceBlacklist");
-		getLogger().info("Enabled. (Version " + pdfFile.getVersion() + ")");
+		sepInv = config.getConfBoolean("SeperateInventories");
+		if (sepInv) {
+			InventoryHandler.getInstance().initInvHandler(getDataFolder());
+			pm.registerEvents(new CPInventoryListener(), this);
+		}
+		log.info("Enabled. (Version " + pdfFile.getVersion() + ")");
 	}
 
 	/*
@@ -68,7 +80,7 @@ public class CreativePlus extends AbstractAdminCmdPlugin{
 	 */
 	public void onDisable() {
 		PluginDescriptionFile pdfFile = this.getDescription();
-		getLogger().info("Disabled. (Version " + pdfFile.getVersion() + ")");
+		log.info("Disabled. (Version " + pdfFile.getVersion() + ")");
 	}
 
 	@Override
@@ -91,5 +103,4 @@ public class CreativePlus extends AbstractAdminCmdPlugin{
 		Utils.addLocale("blacklisted", ChatColor.GOLD + "%block " + ChatColor.RED
 				+ "is blacklisted and you are not allowed to place it");
 	}
-
 }
