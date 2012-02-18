@@ -30,8 +30,11 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
+
 import de.Lathanael.CP.CreativePlus.Configuration;
 import de.Lathanael.CP.CreativePlus.CreativePlus;
+import de.Lathanael.CP.Inventory.InventoryHandler;
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Tools.Utils;
 
@@ -40,6 +43,12 @@ import be.Balor.Tools.Utils;
  *
  */
 public class CPPlayerListener implements Listener {
+
+	@EventHandler(priority = EventPriority.NORMAL)
+	public void onPlayerJoin(PlayerJoinEvent event) {
+		InventoryHandler.getInstance().createPlayerFiles(event.getPlayer().getName());
+	}
+
 
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onPlayerDropItem(PlayerDropItemEvent event) {

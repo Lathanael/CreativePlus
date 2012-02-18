@@ -36,8 +36,13 @@ public class Converter {
 
 	public static ItemStack[] deSerializeInventory(CPInventory stack) {
 		ItemStack[] inventory = new ItemStack[36];
+		if (stack == null)
+			return inventory;
 		CPItemStack[] itemStack = stack.getInventory();
+		int i = 0;
 		for (CPItemStack item : itemStack) {
+			if (item == null)
+				continue;
 			ItemStack is = new ItemStack(item.getId(), item.getAmount());
 			is.getData().setData(item.getData());
 			is.setDurability(item.getDurability());
@@ -52,6 +57,8 @@ public class Converter {
 				}
 				is.addEnchantments(enchantments);
 			}
+			inventory[i] = is;
+			i++;
 		}
 		return inventory;
 	}

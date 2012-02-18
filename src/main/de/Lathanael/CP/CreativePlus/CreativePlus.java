@@ -91,6 +91,7 @@ public class CreativePlus extends AbstractAdminCmdPlugin{
 		permissionLinker.addPermChild("admincmd.creativeplus.breakbl");
 		permissionLinker.addPermChild("admincmd.creativeplus.placebl");
 		permissionLinker.addPermChild("admincmd.creativeplus.chest.allowed");
+		permissionLinker.addPermChild("admincmd.creativeplus.sharedinv");
 	}
 
 	@Override

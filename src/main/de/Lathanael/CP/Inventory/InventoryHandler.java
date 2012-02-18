@@ -18,23 +18,17 @@
 
 package de.Lathanael.CP.Inventory;
 
+import java.io.EOFException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
-
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-
-import de.Lathanael.CP.CreativePlus.CreativePlus;
-
 
 /**
  * @author Lathanael (aka Philippe Leipold)
@@ -44,8 +38,6 @@ public class InventoryHandler {
 
 	public HashMap<Player, Inventory> inventories = new HashMap<Player, Inventory>();
 	private File directory;
-	private FilenameFilter ymlFilter = new YamlFileFilter();
-	private final Set<String> filePlayers = new HashSet<String>();
 	private static InventoryHandler instance;
 
 	public static InventoryHandler getInstance() {
@@ -58,18 +50,32 @@ public class InventoryHandler {
 		directory = new File(file, "PlayerInventories");
 		if (!directory.exists())
 			directory.mkdirs();
-		loadPlayerFiles();
 	}
 
-	public void saveInventory(Player player) {
-		checkFile(player.getName());
+	public void createPlayerFiles(String playerName) {
+		File playerFolder = new File(directory.getPath() + File.separator + playerName);
+		if (!playerFolder.exists())
+			playerFolder.mkdirs();
+		File creative = new File(directory.getPath() + File.separator + playerName, "creative.inv");
+		File survival = new File(directory.getPath() + File.separator + playerName, "survival.inv");
+		try {
+			if (!creative.exists())
+				creative.createNewFile();
+			if (!survival.exists())
+				survival.createNewFile();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void saveInventory(Player player, String gameMode) {
 		CPInventory inv = Converter.serializeInventory(player.getInventory().getContents());
-		savePlayerFile(player.getName(), inv);
+		savePlayerFile(player.getName(),gameMode, inv);
 		player.getInventory().clear();
 	}
 
-	public void loadInventory(Player player) {
-		CPInventory inv = readPlayerFile(player.getName());
+	public void loadInventory(Player player, String gameMode) {
+		CPInventory inv = readPlayerFile(player.getName(), gameMode);
 		ItemStack[] stack = Converter.deSerializeInventory(inv);
 		int i = 0;
 		for (ItemStack item : stack) {
@@ -78,32 +84,8 @@ public class InventoryHandler {
 		}
 	}
 
-	public void checkFile(String playerName) {
-		if (!filePlayers.contains(playerName))
-			createNewPlayerFile(playerName);
-	}
-
-	public void createNewPlayerFile(String playerName) {
-		File playerFile = new File(directory.getPath(), playerName + ".yml");
-		try {
-			playerFile.createNewFile();
-		} catch (IOException e) {
-			CreativePlus.log.info("Error while creating new PlayerFile for: " + playerName);
-			e.printStackTrace();
-		}
-		filePlayers.add(playerName);
-	}
-
-	public void loadPlayerFiles() {
-		File[] files = directory.listFiles(ymlFilter);
-		for (File file : files) {
-			String name = file.getName();
-			filePlayers.add(name.substring(0, name.lastIndexOf('.')));
-		}
-	}
-
-	public CPInventory readPlayerFile(String playerName) {
-		File playerFile = new File(directory.getPath(), playerName + ".inv");
+	public CPInventory readPlayerFile(String playerName, String gameMode) {
+		File playerFile = new File(directory.getPath() + File.separator + playerName, gameMode + ".inv");
 		FileInputStream fis = null;
 		ObjectInputStream oit = null;
 		CPInventory inv = null;
@@ -111,7 +93,8 @@ public class InventoryHandler {
 			fis = new FileInputStream(playerFile);
 			oit = new ObjectInputStream(fis);
 			inv = (CPInventory) oit.readObject();
-		} catch(IOException e) {
+		} catch (EOFException e) {
+		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
@@ -119,8 +102,10 @@ public class InventoryHandler {
 		return inv;
 	}
 
-	public void savePlayerFile(String playerName, CPInventory inv) {
-		File playerFile = new File(directory.getPath(), playerName + ".inv");
+	public void savePlayerFile(String playerName, String gameMode, CPInventory inv) {
+		File playerFile = new File(directory.getPath() + File.separator + playerName, gameMode + ".inv");
+		if (playerFile.exists())
+			playerFile.delete();
 		FileOutputStream fos = null;
 		ObjectOutputStream out = null;
 		try {
@@ -130,20 +115,6 @@ public class InventoryHandler {
 			out.close();
 		} catch(IOException e) {
 			e.printStackTrace();
-		}
-	}
-	/*
-	 * Gets all files with the extension '.yml'
-	 */
-	private class YamlFileFilter implements FilenameFilter {
-
-		public boolean accept(File dir, String name) {
-			if (name.endsWith(".yml")) {
-				return true;
-			}
-			else {
-				return false;
-			}
 		}
 	}
 }

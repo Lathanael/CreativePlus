@@ -37,10 +37,14 @@ public class CPInventoryListener implements Listener {
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onPlayerGameModeChange(PlayerGameModeChangeEvent event) {
 		Player player = event.getPlayer();
+		if (player.hasPermission("admincmd.creativeplus.sharedinv"))
+			return;
 		if (event.getNewGameMode().equals(GameMode.CREATIVE)) {
-			InventoryHandler.getInstance().saveInventory(player);
+			InventoryHandler.getInstance().saveInventory(player, "survival");
+			InventoryHandler.getInstance().loadInventory(player, "creative");
 		} else {
-			InventoryHandler.getInstance().loadInventory(player);
+			InventoryHandler.getInstance().saveInventory(player, "creative");
+			InventoryHandler.getInstance().loadInventory(player, "survival");
 		}
 	}
 }
