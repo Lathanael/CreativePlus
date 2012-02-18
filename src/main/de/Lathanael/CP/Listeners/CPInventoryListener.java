@@ -25,6 +25,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerGameModeChangeEvent;
 
+import de.Lathanael.CP.CreativePlus.CreativePlus;
 import de.Lathanael.CP.Inventory.InventoryHandler;
 
 /**
@@ -37,6 +38,8 @@ public class CPInventoryListener implements Listener {
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onPlayerGameModeChange(PlayerGameModeChangeEvent event) {
 		Player player = event.getPlayer();
+		if (!CreativePlus.worlds.contains(player.getWorld().getName()))
+			return;
 		if (player.hasPermission("admincmd.creativeplus.sharedinv"))
 			return;
 		if (event.getNewGameMode().equals(GameMode.CREATIVE)) {

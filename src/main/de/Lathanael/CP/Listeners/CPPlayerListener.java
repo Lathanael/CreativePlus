@@ -72,6 +72,8 @@ public class CPPlayerListener implements Listener {
 		if (event.isCancelled())
 			return;
 		Player player = event.getPlayer();
+		if (!CreativePlus.worlds.contains(player.getWorld().getName()))
+			return;
 		if (event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
 			Material mat = event.getClickedBlock().getType();
 			if ((mat.equals(Material.CHEST) || mat.equals(Material.DISPENSER) || mat.equals(Material.BREWING_STAND)
@@ -88,6 +90,8 @@ public class CPPlayerListener implements Listener {
 		if (event.isCancelled())
 			return;
 		Player player = event.getPlayer();
+		if (!CreativePlus.worlds.contains(player.getWorld().getName()))
+			return;
 		Entity clicked = event.getRightClicked();
 		if ((clicked instanceof StorageMinecart || clicked instanceof PoweredMinecart)
 				&& !PermissionManager.hasPerm(player, "admincmd.creativeplus.storage.allowed"))
