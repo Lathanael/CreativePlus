@@ -32,7 +32,7 @@ import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 
-import de.Lathanael.CP.CreativePlus.Configuration;
+import de.Lathanael.CP.CreativePlus.CPConfigEnum;
 import de.Lathanael.CP.CreativePlus.CreativePlus;
 import de.Lathanael.CP.Inventory.InventoryHandler;
 import be.Balor.Manager.Permissions.PermissionManager;
@@ -59,7 +59,7 @@ public class CPPlayerListener implements Listener {
 			return;
 		if (player.getGameMode() != GameMode.CREATIVE)
 			return;
-		if (Configuration.getInstance().getConfBoolean("PlayersCanDropItems"))
+		if (CPConfigEnum.DROPITEMS.getBoolean())
 			return;
 		if (PermissionManager.hasPerm(player, "admincmd.creativeplus.dropitems", false))
 			return;

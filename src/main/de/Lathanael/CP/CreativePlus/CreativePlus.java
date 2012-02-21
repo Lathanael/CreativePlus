@@ -17,6 +17,7 @@
 
 package de.Lathanael.CP.CreativePlus;
 
+import java.io.File;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -31,6 +32,7 @@ import de.Lathanael.CP.Listeners.CPPlayerListener;
 
 import be.Balor.Manager.Permissions.PermParent;
 import be.Balor.Tools.Utils;
+import be.Balor.Tools.Configuration.File.ExtendedConfiguration;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 import be.Balor.bukkit.AdminCmd.AbstractAdminCmdPlugin;
 
@@ -40,7 +42,7 @@ import be.Balor.bukkit.AdminCmd.AbstractAdminCmdPlugin;
  */
 public class CreativePlus extends AbstractAdminCmdPlugin{
 
-	private Configuration config;
+	private ExtendedConfiguration config;
 	public static List<String> worlds;
 	public static List<Integer> blBreak;
 	public static List<Integer> blPlace;
@@ -54,18 +56,21 @@ public class CreativePlus extends AbstractAdminCmdPlugin{
 	@Override
 	public void onEnable() {
 		super.onEnable();
+		PluginDescriptionFile pdfFile = this.getDescription();
 		log = ACPluginManager.getPluginInstance("CreativePlus").getLogger();
-		config = Configuration.getInstance();
-		config.setInstance(this);
+		config = ExtendedConfiguration.loadConfiguration(new File(getDataFolder(), "config.yml"));
+		CPConfigEnum.setPluginInfos(pdfFile);
+		CPConfigEnum.setPluginConfig(config);
+		config.options().copyDefaults(true).header(CPConfigEnum.getHeader());
+		config.addDefaults(CPConfigEnum.getDefaultvalues());
 		final PluginManager pm = getServer().getPluginManager();
 		pm.registerEvents(new CPPlayerListener(), this);
 		pm.registerEvents(new CPBlockListener(), this);
-		PluginDescriptionFile pdfFile = this.getDescription();
 		permissionLinker.registerAllPermParent();
-		worlds = config.getConfStringList("CreativeWorlds");
-		blBreak = config.getConfIntList("BlockBreakBlacklist");
-		blPlace = config.getConfIntList("BlockPlaceBlacklist");
-		sepInv = config.getConfBoolean("SeperateInventories");
+		worlds = CPConfigEnum.WROLDS.getStringList();
+		blBreak = CPConfigEnum.BREAK_LIST.getIntList();
+		blPlace = CPConfigEnum.PLACE_LIST.getIntList();
+		sepInv = CPConfigEnum.SEP_INV.getBoolean();
 		if (sepInv) {
 			InventoryHandler.getInstance().initInvHandler(getDataFolder());
 			pm.registerEvents(new CPInventoryListener(), this);
