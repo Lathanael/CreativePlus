@@ -18,6 +18,7 @@
 package de.Lathanael.CP.CreativePlus;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -63,6 +64,11 @@ public class CreativePlus extends AbstractAdminCmdPlugin{
 		CPConfigEnum.setPluginConfig(config);
 		config.options().copyDefaults(true).header(CPConfigEnum.getHeader());
 		config.addDefaults(CPConfigEnum.getDefaultvalues());
+		try {
+			config.save();
+		} catch (IOException e) {
+			log.warning("Error while saving the config.yml!");
+		}
 		final PluginManager pm = getServer().getPluginManager();
 		pm.registerEvents(new CPPlayerListener(), this);
 		pm.registerEvents(new CPBlockListener(), this);
