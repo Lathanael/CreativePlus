@@ -49,7 +49,7 @@ public enum CPConfigEnum {
 			return val[count++];
 		}
 	}), "The worlds in which CreativePlus will be active"),
-	BREAK_LIST("CreativeWorlds", Collections.list(new Enumeration<Integer>() {
+	BREAK_LIST("BreakBlacklist", Collections.list(new Enumeration<Integer>() {
 		private int count = 0;
 		private final Integer[] val = new Integer[] {7, 54, 63, 64, 68, 69, 71, 77, 93, 94, 96};
 
@@ -63,7 +63,7 @@ public enum CPConfigEnum {
 			return val[count++];
 		}
 	}), "Blocks/Items which can not be destroyed by a player while beeing in creative-mode."),
-	PLACE_LIST("CreativeWorlds", Collections.list(new Enumeration<Integer>() {
+	PLACE_LIST("PlaceBlacklist", Collections.list(new Enumeration<Integer>() {
 		private int count = 0;
 		private final Integer[] val = new Integer[] {7, 8, 9, 10, 11};
 
