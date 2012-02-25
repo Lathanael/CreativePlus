@@ -90,26 +90,6 @@ public enum CPConfigEnum {
 		this.value = value;
 	}
 
-//	/**
-//	 * @param pluginInstance
-//	 *            the pluginInstance to set
-//	 */
-//	public void setInstance(CreativePlus instance) {
-//		String directory = instance.getDataFolder().getPath();
-//		File file = createConfFile(directory, "config.yml");
-//		pluginConfig = ExtendedConfiguration.loadConfiguration(file);
-//		pluginConfig.add("CreativeWorlds", Arrays.asList("Creative1", "Creative2"));
-//		pluginConfig.add("PlayersCanDropItems", false);
-//		pluginConfig.add("BlockBreakBlacklist", Arrays.asList(7, 54, 63, 64, 68, 69, 71, 77, 93, 94, 96));
-//		pluginConfig.add("BlockPlaceBlacklist", Arrays.asList(7, 8, 9, 10, 11));
-//		pluginConfig.add("SeperateInventories", true);
-//		try {
-//			pluginConfig.save();
-//		} catch(IOException exception) {
-//			exception.printStackTrace();
-//		}
-//	}
-
 	public String getString() {
 		return pluginConfig.getString(path);
 	}
