@@ -51,7 +51,7 @@ public class CPBlockListener implements Listener {
 		int blockID = event.getBlock().getTypeId();
 		if (!CreativePlus.blPlace.contains(blockID))
 			return;
-		if (PermissionManager.hasPerm(player, "admincmd.creativeplus.placebl", false))
+		if (PermissionManager.hasPerm(player, "creativeplus.placebl", false))
 			return;
 		event.setCancelled(true);
 		HashMap<String, String> replace = new HashMap<String, String>();
@@ -71,7 +71,7 @@ public class CPBlockListener implements Listener {
 		int blockID = event.getBlock().getTypeId();
 		if (!CreativePlus.blBreak.contains(blockID))
 			return;
-		if (PermissionManager.hasPerm(player, "admincmd.creativeplus.breakbl", false))
+		if (PermissionManager.hasPerm(player, "creativeplus.breakbl", false))
 			return;
 		event.setCancelled(true);
 	}

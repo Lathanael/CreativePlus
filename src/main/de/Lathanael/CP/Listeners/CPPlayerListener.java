@@ -61,7 +61,7 @@ public class CPPlayerListener implements Listener {
 			return;
 		if (CPConfigEnum.DROPITEMS.getBoolean())
 			return;
-		if (PermissionManager.hasPerm(player, "admincmd.creativeplus.dropitems", false))
+		if (PermissionManager.hasPerm(player, "creativeplus.dropitems", false))
 			return;
 		event.setCancelled(true);
 		Utils.sI18n(player, "NoItemsDrop");
@@ -79,7 +79,7 @@ public class CPPlayerListener implements Listener {
 			if ((mat.equals(Material.CHEST) || mat.equals(Material.DISPENSER) || mat.equals(Material.BREWING_STAND)
 					|| mat.equals(Material.WORKBENCH) || mat.equals(Material.BURNING_FURNACE)
 					|| mat.equals(Material.FURNACE) || mat.equals(Material.ENCHANTMENT_TABLE))
-					&& !PermissionManager.hasPerm(player, "admincmd.creativeplus.storage.allowed")) {
+					&& !PermissionManager.hasPerm(player, "creativeplus.storage.allowed")) {
 				event.setCancelled(true);
 			}
 		}
@@ -94,7 +94,7 @@ public class CPPlayerListener implements Listener {
 			return;
 		Entity clicked = event.getRightClicked();
 		if ((clicked instanceof StorageMinecart || clicked instanceof PoweredMinecart)
-				&& !PermissionManager.hasPerm(player, "admincmd.creativeplus.storage.allowed"))
+				&& !PermissionManager.hasPerm(player, "creativeplus.storage.allowed"))
 			event.setCancelled(true);
 	}
 }

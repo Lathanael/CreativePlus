@@ -40,7 +40,7 @@ public class CPInventoryListener implements Listener {
 		Player player = event.getPlayer();
 		if (!CreativePlus.worlds.contains(player.getWorld().getName()))
 			return;
-		if (player.hasPermission("admincmd.creativeplus.sharedinv"))
+		if (player.hasPermission("creativeplus.sharedinv"))
 			return;
 		if (event.getNewGameMode().equals(GameMode.CREATIVE)) {
 			InventoryHandler.getInstance().saveInventory(player, "survival");

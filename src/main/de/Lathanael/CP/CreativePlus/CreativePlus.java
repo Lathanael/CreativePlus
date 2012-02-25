@@ -101,7 +101,7 @@ public class CreativePlus extends AbstractAdminCmdPlugin{
 		major.addChild("creativeplus.dropitems");
 		major.addChild("creativeplus.breakbl");
 		major.addChild("creativeplus.placebl");
-		major.addChild("creativeplus.chest.allowed");
+		major.addChild("creativeplus.storage.allowed");
 		major.addChild("creativeplus.sharedinv");
 	}
 
