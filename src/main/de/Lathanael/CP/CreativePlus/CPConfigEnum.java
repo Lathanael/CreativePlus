@@ -94,6 +94,7 @@ public enum CPConfigEnum {
 		return pluginConfig.getString(path);
 	}
 
+
 	public int getInt() {
 		return pluginConfig.getInt(path);
 	}
