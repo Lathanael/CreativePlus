@@ -103,6 +103,7 @@ public class CreativePlus extends AbstractAdminCmdPlugin{
 		major.addChild("creativeplus.placebl");
 		major.addChild("creativeplus.storage.allowed");
 		major.addChild("creativeplus.sharedinv");
+		major.addChild("creativeplus.deathdrop");
 	}
 
 	@Override
@@ -114,5 +115,7 @@ public class CreativePlus extends AbstractAdminCmdPlugin{
 		Utils.addLocale("NoItemsDrop", ChatColor.RED + "You are not allowed to drop items/blocks while beeing in creative mode!");
 		Utils.addLocale("blacklisted", ChatColor.GOLD + "%block " + ChatColor.RED
 				+ "is blacklisted and you are not allowed to place it");
+		Utils.addLocale("NoDeathDrop", ChatColor.RED + "You are not allowed to drop items/blocks on death while beeing in creative mode!");
+		Utils.addLocale("NoItemPickUp", ChatColor.RED + "You are not allowed to pick up items/blocks while beeing in creative mode!");
 	}
 }

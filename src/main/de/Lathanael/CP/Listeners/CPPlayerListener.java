@@ -31,6 +31,7 @@ import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerPickupItemEvent;
 
 import de.Lathanael.CP.CreativePlus.CPConfigEnum;
 import de.Lathanael.CP.CreativePlus.CreativePlus;
@@ -49,6 +50,19 @@ public class CPPlayerListener implements Listener {
 		InventoryHandler.getInstance().createPlayerFiles(event.getPlayer().getName());
 	}
 
+	@EventHandler(priority = EventPriority.HIGHEST)
+	public void onPlayerPickUpItem(PlayerPickupItemEvent event) {
+		if (CPConfigEnum.PICK_ITEM.getBoolean())
+			return;
+		if (event.isCancelled())
+			return;
+		if (event.getPlayer().getGameMode() != GameMode.CREATIVE)
+			return;
+		if (PermissionManager.hasPerm(event.getPlayer(), "creativeplus.pickitems", false))
+			return;
+		event.setCancelled(true);
+		Utils.sI18n(event.getPlayer(), "NoItemPickUp");
+	}
 
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onPlayerDropItem(PlayerDropItemEvent event) {
