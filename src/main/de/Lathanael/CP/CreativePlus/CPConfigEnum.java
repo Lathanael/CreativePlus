@@ -33,7 +33,7 @@ import org.bukkit.plugin.PluginDescriptionFile;
  */
 public enum CPConfigEnum {
 
-	DROPITEMS("PlayersCanDropItems", false, "If set to true all players are allowed to drop any item/block."),
+	DROPITEMS("PlayersCanDropItems", false, "If set to true all players in CreativeMode are allowed to drop any item/block."),
 	SEP_INV("SeperateInventories", true, "If set to true each player has a inventory used for CreativeMode and one for SurvivalMode."),
 	WROLDS("CreativeWorlds", Collections.list(new Enumeration<String>() {
 		private int count = 0;
