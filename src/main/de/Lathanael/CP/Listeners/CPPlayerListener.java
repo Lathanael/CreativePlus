@@ -45,9 +45,10 @@ import be.Balor.Tools.Utils;
  */
 public class CPPlayerListener implements Listener {
 
-	@EventHandler(priority = EventPriority.NORMAL)
+	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPlayerJoin(PlayerJoinEvent event) {
-		InventoryHandler.getInstance().createPlayerFiles(event.getPlayer().getName());
+		if (CPConfigEnum.SEP_INV.getBoolean())
+			InventoryHandler.getInstance().createPlayerFiles(event.getPlayer().getName());
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST)
