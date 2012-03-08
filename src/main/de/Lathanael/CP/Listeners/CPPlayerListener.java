@@ -57,24 +57,27 @@ public class CPPlayerListener implements Listener {
 			return;
 		if (event.isCancelled())
 			return;
-		if (event.getPlayer().getGameMode() != GameMode.CREATIVE)
+		Player player = event.getPlayer();
+		if (!CreativePlus.worlds.contains(player.getWorld().getName()))
 			return;
-		if (PermissionManager.hasPerm(event.getPlayer(), "creativeplus.pickitems", false))
+		if (player.getGameMode() != GameMode.CREATIVE)
+			return;
+		if (PermissionManager.hasPerm(player, "creativeplus.pickitems", false))
 			return;
 		event.setCancelled(true);
-		Utils.sI18n(event.getPlayer(), "NoItemPickUp");
+		Utils.sI18n(player, "NoItemPickUp");
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onPlayerDropItem(PlayerDropItemEvent event) {
+		if (CPConfigEnum.DROPITEMS.getBoolean())
+			return;
 		if (event.isCancelled())
 			return;
 		Player player = event.getPlayer();
 		if (!CreativePlus.worlds.contains(player.getWorld().getName()))
 			return;
 		if (player.getGameMode() != GameMode.CREATIVE)
-			return;
-		if (CPConfigEnum.DROPITEMS.getBoolean())
 			return;
 		if (PermissionManager.hasPerm(player, "creativeplus.dropitems", false))
 			return;
