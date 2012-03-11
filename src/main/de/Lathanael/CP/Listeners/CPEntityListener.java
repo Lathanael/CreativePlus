@@ -31,6 +31,7 @@ import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Tools.Utils;
 
 import de.Lathanael.CP.CreativePlus.CPConfigEnum;
+import de.Lathanael.CP.CreativePlus.CreativePlus;
 
 /**
  * @author Lathanael (aka Philippe Leipold)
@@ -45,6 +46,8 @@ public class CPEntityListener implements Listener {
 		if (!(event.getEntity() instanceof Player))
 			return;
 		Player p = (Player) event.getEntity();
+		if (!CreativePlus.worlds.contains(p.getWorld().getName()))
+			return;
 		if (PermissionManager.hasPerm(p, "creativeplus.deathdrop", false))
 			return;
 		if (p.getGameMode() == GameMode.CREATIVE) {

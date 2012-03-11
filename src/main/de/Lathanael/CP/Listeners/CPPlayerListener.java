@@ -57,7 +57,8 @@ public class CPPlayerListener implements Listener {
 		if (PermissionManager.hasPerm(player, "creativeplus.pickitems", false))
 			return;
 		event.setCancelled(true);
-		Utils.sI18n(player, "NoItemPickUp");
+		// TODO: Better way report about the missing permission to avoid the spamming of this message
+		//Utils.sI18n(player, "NoItemPickUp");
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST)
