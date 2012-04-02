@@ -39,7 +39,7 @@ import de.Lathanael.CP.CreativePlus.CreativePlus;
  */
 public class CPEntityListener implements Listener {
 
-	@EventHandler(priority = EventPriority.HIGHEST)
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onEntityDeath(EntityDeathEvent event) {
 		if (CPConfigEnum.DROP_ON_DEATH.getBoolean())
 			return;

@@ -28,8 +28,11 @@ import org.bukkit.plugin.PluginManager;
 
 import de.Lathanael.CP.Inventory.InventoryHandler;
 import de.Lathanael.CP.Listeners.CPBlockListener;
+import de.Lathanael.CP.Listeners.CPBucketListener;
 import de.Lathanael.CP.Listeners.CPInventoryListener;
 import de.Lathanael.CP.Listeners.CPPlayerListener;
+import de.Lathanael.CP.Listeners.CPProtectListener;
+import de.Lathanael.CP.Protect.ChunkFiles;
 
 import be.Balor.Manager.Permissions.PermParent;
 import be.Balor.Tools.Utils;
@@ -81,6 +84,12 @@ public class CreativePlus extends AbstractAdminCmdPlugin{
 			InventoryHandler.getInstance().initInvHandler(getDataFolder());
 			pm.registerEvents(new CPInventoryListener(), this);
 		}
+		if (CPConfigEnum.BUCKET.getBoolean())
+			pm.registerEvents(new CPBucketListener(), this);
+		if (CPConfigEnum.PROTECT_BLOCKS.getBoolean()) {
+			ChunkFiles.initFiles(getDataFolder() + File.separator + "Blocks", ".blocks");
+			pm.registerEvents(new CPProtectListener(), this);
+		}
 		log.info("Enabled. (Version " + pdfFile.getVersion() + ")");
 	}
 
@@ -90,6 +99,7 @@ public class CreativePlus extends AbstractAdminCmdPlugin{
 	 * @see org.bukkit.plugin.Plugin#onDisable()
 	 */
 	public void onDisable() {
+		ChunkFiles.closeFiles();
 		PluginDescriptionFile pdfFile = this.getDescription();
 		log.info("Disabled. (Version " + pdfFile.getVersion() + ")");
 	}
@@ -105,6 +115,8 @@ public class CreativePlus extends AbstractAdminCmdPlugin{
 		major.addChild("creativeplus.sharedinv");
 		major.addChild("creativeplus.deathdrop");
 		major.addChild("creativeplus.pickitems");
+		major.addChild("creativeplus.usebucket");
+		major.addChild("creativeplus.breakproteced");
 	}
 
 	@Override
@@ -118,5 +130,7 @@ public class CreativePlus extends AbstractAdminCmdPlugin{
 				+ "is blacklisted and you are not allowed to place it");
 		Utils.addLocale("NoDeathDrop", ChatColor.RED + "You are not allowed to drop items/blocks on death while beeing in creative mode!");
 		Utils.addLocale("NoItemPickUp", ChatColor.RED + "You are not allowed to pick up items/blocks while beeing in creative mode!");
+		Utils.addLocale("NoBucket", "You are not allowed to empty Buckets while you are in creative mode.");
+		Utils.addLocale("ProtectedBlock", "The block is protected as it was placed by a creative player.");
 	}
 }

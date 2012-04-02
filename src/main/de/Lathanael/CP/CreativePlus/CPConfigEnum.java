@@ -37,6 +37,8 @@ public enum CPConfigEnum {
 	DROP_ON_DEATH("DropItemsOnDeath", false, "If true a player in CreativeMode will drop his items upon death"),
 	PICK_ITEM("PickUpItems", false, "If set to true, players in CreativeMode can pick up an item."),
 	SEP_INV("SeperateInventories", true, "If set to true each player has a inventory used for CreativeMode and one for SurvivalMode."),
+	BUCKET("PlayersCanUseBuckets", false, "Allows players to use buckets in creative mode."),
+	PROTECT_BLOCKS("ProtectedBlocks", true, "If set to true, all blocks placed in creative will be saved and can not be destroyed by a player in Survival mode."),
 	WROLDS("CreativeWorlds", Collections.list(new Enumeration<String>() {
 		private int count = 0;
 		private final String[] val = new String[] { "Creative1", "Creative2", "Creative3" };

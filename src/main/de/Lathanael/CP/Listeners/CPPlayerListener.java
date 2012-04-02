@@ -43,11 +43,9 @@ import be.Balor.Tools.Utils;
  */
 public class CPPlayerListener implements Listener {
 
-	@EventHandler(priority = EventPriority.HIGHEST)
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onPlayerPickUpItem(PlayerPickupItemEvent event) {
 		if (CPConfigEnum.PICK_ITEM.getBoolean())
-			return;
-		if (event.isCancelled())
 			return;
 		Player player = event.getPlayer();
 		if (!CreativePlus.worlds.contains(player.getWorld().getName()))
@@ -61,11 +59,9 @@ public class CPPlayerListener implements Listener {
 		//Utils.sI18n(player, "NoItemPickUp");
 	}
 
-	@EventHandler(priority = EventPriority.HIGHEST)
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onPlayerDropItem(PlayerDropItemEvent event) {
 		if (CPConfigEnum.DROPITEMS.getBoolean())
-			return;
-		if (event.isCancelled())
 			return;
 		Player player = event.getPlayer();
 		if (!CreativePlus.worlds.contains(player.getWorld().getName()))
@@ -78,10 +74,8 @@ public class CPPlayerListener implements Listener {
 		Utils.sI18n(player, "NoItemsDrop");
 	}
 
-	@EventHandler(priority = EventPriority.HIGHEST)
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onPlayerInteract(PlayerInteractEvent event) {
-		if (event.isCancelled())
-			return;
 		Player player = event.getPlayer();
 		if (!CreativePlus.worlds.contains(player.getWorld().getName()))
 			return;
@@ -98,10 +92,8 @@ public class CPPlayerListener implements Listener {
 		}
 	}
 
-	@EventHandler(priority = EventPriority.HIGHEST)
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
-		if (event.isCancelled())
-			return;
 		Player player = event.getPlayer();
 		if (!CreativePlus.worlds.contains(player.getWorld().getName()))
 			return;
