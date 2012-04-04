@@ -31,7 +31,9 @@ import de.Lathanael.CP.Listeners.CPBlockListener;
 import de.Lathanael.CP.Listeners.CPBucketListener;
 import de.Lathanael.CP.Listeners.CPInventoryListener;
 import de.Lathanael.CP.Listeners.CPPlayerListener;
-import de.Lathanael.CP.Listeners.CPProtectListener;
+import de.Lathanael.CP.Listeners.CPProtectBlockListener;
+import de.Lathanael.CP.Listeners.CPProtectMobListerner;
+import de.Lathanael.CP.Listeners.CPProtectPlayerListener;
 import de.Lathanael.CP.Protect.ChunkFiles;
 
 import be.Balor.Manager.Permissions.PermParent;
@@ -72,14 +74,13 @@ public class CreativePlus extends AbstractAdminCmdPlugin{
 		} catch (IOException e) {
 			log.warning("Error while saving the config.yml!");
 		}
-		final PluginManager pm = getServer().getPluginManager();
-		pm.registerEvents(new CPPlayerListener(), this);
-		pm.registerEvents(new CPBlockListener(), this);
-		permissionLinker.registerAllPermParent();
 		worlds = CPConfigEnum.WROLDS.getStringList();
 		blBreak = CPConfigEnum.BREAK_LIST.getIntList();
 		blPlace = CPConfigEnum.PLACE_LIST.getIntList();
 		sepInv = CPConfigEnum.SEP_INV.getBoolean();
+		final PluginManager pm = getServer().getPluginManager();
+		pm.registerEvents(new CPPlayerListener(), this);
+		pm.registerEvents(new CPBlockListener(), this);
 		if (sepInv) {
 			InventoryHandler.getInstance().initInvHandler(getDataFolder());
 			pm.registerEvents(new CPInventoryListener(), this);
@@ -88,8 +89,13 @@ public class CreativePlus extends AbstractAdminCmdPlugin{
 			pm.registerEvents(new CPBucketListener(), this);
 		if (CPConfigEnum.PROTECT_BLOCKS.getBoolean()) {
 			ChunkFiles.initFiles(getDataFolder() + File.separator + "Blocks", ".blocks");
-			pm.registerEvents(new CPProtectListener(), this);
+			pm.registerEvents(new CPProtectBlockListener(), this);
 		}
+		if (CPConfigEnum.PROTECT_MOBS.getBoolean())
+			pm.registerEvents(new CPProtectMobListerner(), this);
+		if (CPConfigEnum.PROTECT_PLAYERS.getBoolean())
+			pm.registerEvents(new CPProtectPlayerListener(), this);
+		permissionLinker.registerAllPermParent();
 		log.info("Enabled. (Version " + pdfFile.getVersion() + ")");
 	}
 
@@ -117,6 +123,8 @@ public class CreativePlus extends AbstractAdminCmdPlugin{
 		major.addChild("creativeplus.pickitems");
 		major.addChild("creativeplus.usebucket");
 		major.addChild("creativeplus.breakproteced");
+		major.addChild("creativeplus.damage.mob");
+		major.addChild("creativeplus.damage.player");
 	}
 
 	@Override
