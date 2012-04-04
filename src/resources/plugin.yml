@@ -3,5 +3,6 @@ main: de.Lathanael.CP.CreativePlus.CreativePlus
 version: ${project.version} (BUILD ${git.build.time})
 author: Lathanael
 depend: [AdminCmd]
+softdepend: [BinaryFileDB]
 description: >
              Enhancments to the standard MC Creative mode.
