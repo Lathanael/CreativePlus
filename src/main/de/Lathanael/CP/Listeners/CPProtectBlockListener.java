@@ -40,7 +40,7 @@ import de.Lathanael.CP.Protect.ChunkFiles;
  * @author Lathanael (aka Philippe Leipold)
  *
  */
-public class CPProtectListener implements Listener {
+public class CPProtectBlockListener implements Listener {
 
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onBlockPlace(BlockPlaceEvent event) {
