@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import org.bukkit.ChatColor;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 
@@ -77,24 +78,32 @@ public class CreativePlus extends AbstractAdminCmdPlugin{
 		worlds = CPConfigEnum.WROLDS.getStringList();
 		blBreak = CPConfigEnum.BREAK_LIST.getIntList();
 		blPlace = CPConfigEnum.PLACE_LIST.getIntList();
-		sepInv = CPConfigEnum.SEP_INV.getBoolean();
 		final PluginManager pm = getServer().getPluginManager();
 		pm.registerEvents(new CPPlayerListener(), this);
 		pm.registerEvents(new CPBlockListener(), this);
-		if (sepInv) {
+		if (CPConfigEnum.SEP_INV.getBoolean()) {
 			InventoryHandler.getInstance().initInvHandler(getDataFolder());
 			pm.registerEvents(new CPInventoryListener(), this);
 		}
 		if (CPConfigEnum.BUCKET.getBoolean())
 			pm.registerEvents(new CPBucketListener(), this);
-		if (CPConfigEnum.PROTECT_BLOCKS.getBoolean()) {
-			ChunkFiles.initFiles(getDataFolder() + File.separator + "Blocks", ".blocks");
-			pm.registerEvents(new CPProtectBlockListener(), this);
-		}
 		if (CPConfigEnum.PROTECT_MOBS.getBoolean())
 			pm.registerEvents(new CPProtectMobListerner(), this);
 		if (CPConfigEnum.PROTECT_PLAYERS.getBoolean())
 			pm.registerEvents(new CPProtectPlayerListener(), this);
+		Plugin fileDB = pm.getPlugin("BinaryFileDB");
+		if (CPConfigEnum.PROTECT_BLOCKS.getBoolean() && fileDB != null && fileDB.isEnabled()) {
+			ChunkFiles.initFiles(getDataFolder() + File.separator + "Blocks", ".blocks");
+			pm.registerEvents(new CPProtectBlockListener(), this);
+		} else if (CPConfigEnum.PROTECT_BLOCKS.getBoolean() && (fileDB == null || !fileDB.isEnabled())) {
+			log.info("Plugin BinaryFileDB was not found or is disabled. Disabled BlockProtection.");
+			CPConfigEnum.PROTECT_BLOCKS.setValue(false);
+			try {
+				config.save();
+			} catch (IOException e) {
+				log.warning("Error while saving the config.yml!");
+			}
+		}
 		permissionLinker.registerAllPermParent();
 		log.info("Enabled. (Version " + pdfFile.getVersion() + ")");
 	}

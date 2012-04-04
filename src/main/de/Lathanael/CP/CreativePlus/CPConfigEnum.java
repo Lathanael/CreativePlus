@@ -95,6 +95,9 @@ public enum CPConfigEnum {
 		this.desc = desc;
 		this.value = value;
 	}
+	public void setValue(final Object value) {
+		pluginConfig.set(path, value);
+	}
 
 	public String getString() {
 		return pluginConfig.getString(path);
