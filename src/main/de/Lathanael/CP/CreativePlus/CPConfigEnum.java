@@ -38,7 +38,7 @@ public enum CPConfigEnum {
 	PICK_ITEM("PickUpItems", false, "If set to true, players in CreativeMode can pick up an item."),
 	SEP_INV("SeperateInventories", true, "If set to true each player has a inventory used for CreativeMode and one for SurvivalMode."),
 	BUCKET("PlayersCanUseBuckets", false, "Allows players to use buckets in creative mode."),
-	PROTECT_BLOCKS("ProtectedBlocks", true, "If set to true, all blocks placed in creative will be saved and can not be destroyed by a player in Survival mode."),
+	PROTECT_BLOCKS("ProtectedBlocks", false, "If set to true, all blocks placed in creative will be saved and can not be destroyed by a player in Survival mode."),
 	PROTECT_PLAYERS("ProtectedPlayers", true, "Setting this to true will make it impossible for creative players to attack survival players with hands or weapons."),
 	PROTECT_MOBS("ProtectedMobs", false, "If set tot true a creative player can not hurt mobs with weapons or bare handed."),
 	WROLDS("CreativeWorlds", Collections.list(new Enumeration<String>() {
