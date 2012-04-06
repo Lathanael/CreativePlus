@@ -49,7 +49,7 @@ public class CPProtectPlayerListener implements Listener {
 		Player player = (Player) damager;
 		if (player.getGameMode() != GameMode.CREATIVE)
 			return;
-		if (target instanceof Player && !PermissionManager.hasPerm(player, "creativeplus.damage.player"))
+		if (target instanceof Player && !PermissionManager.hasPerm(player, "creativeplus.damage.player", false))
 			event.setCancelled(true);
 	}
 }

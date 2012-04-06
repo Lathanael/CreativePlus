@@ -51,7 +51,7 @@ public class CPProtectMobListerner implements Listener {
 		if (player.getGameMode() != GameMode.CREATIVE)
 			return;
 		if (target instanceof LivingEntity && !(target instanceof Player)
-				&& !PermissionManager.hasPerm(player, "creativeplus.damage.mob"))
+				&& !PermissionManager.hasPerm(player, "creativeplus.damage.mob", false))
 			event.setCancelled(true);
 	}
 }
