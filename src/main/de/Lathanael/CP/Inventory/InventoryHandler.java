@@ -71,6 +71,9 @@ public class InventoryHandler {
 	public void saveInventory(Player player, String gameMode) {
 		CPInventory inv = Converter.serializeInventory(player.getInventory().getContents());
 		savePlayerFile(player.getName(),gameMode, inv);
+	}
+
+	public void clearInventory(Player player) {
 		player.getInventory().clear();
 	}
 

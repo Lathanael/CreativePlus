@@ -24,6 +24,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerGameModeChangeEvent;
+import org.bukkit.event.player.PlayerKickEvent;
+import org.bukkit.event.player.PlayerLoginEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 
 import be.Balor.Manager.Permissions.PermissionManager;
 
@@ -36,7 +39,6 @@ import de.Lathanael.CP.Inventory.InventoryHandler;
  */
 public class CPInventoryListener implements Listener {
 
-
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onPlayerGameModeChange(PlayerGameModeChangeEvent event) {
 		Player player = event.getPlayer();
@@ -44,13 +46,57 @@ public class CPInventoryListener implements Listener {
 			return;
 		if (PermissionManager.hasPerm(player, "creativeplus.sharedinv", false))
 			return;
-		InventoryHandler.getInstance().createPlayerFiles(player.getName());
 		if (event.getNewGameMode().equals(GameMode.CREATIVE)) {
 			InventoryHandler.getInstance().saveInventory(player, "survival");
+			InventoryHandler.getInstance().clearInventory(player);
 			InventoryHandler.getInstance().loadInventory(player, "creative");
 		} else {
 			InventoryHandler.getInstance().saveInventory(player, "creative");
+			InventoryHandler.getInstance().clearInventory(player);
 			InventoryHandler.getInstance().loadInventory(player, "survival");
 		}
+	}
+
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+	public void onPlayerLogin(PlayerLoginEvent event) {
+		Player player = event.getPlayer();
+		if (!CreativePlus.worlds.contains(player.getWorld().getName()))
+			return;
+		if (PermissionManager.hasPerm(player, "creativeplus.sharedinv", false))
+			return;
+		InventoryHandler.getInstance().createPlayerFiles(player.getName());
+		if (player.getGameMode().equals(GameMode.CREATIVE)) {
+			InventoryHandler.getInstance().clearInventory(player);
+			InventoryHandler.getInstance().loadInventory(player, "creative");
+		} else {
+			InventoryHandler.getInstance().clearInventory(player);
+			InventoryHandler.getInstance().loadInventory(player, "survival");
+		}
+	}
+
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+	public void onPlayerQuit(PlayerQuitEvent event) {
+		Player player = event.getPlayer();
+		if (!CreativePlus.worlds.contains(player.getWorld().getName()))
+			return;
+		if (PermissionManager.hasPerm(player, "creativeplus.sharedinv", false))
+			return;
+		if (player.getGameMode().equals(GameMode.CREATIVE))
+			InventoryHandler.getInstance().saveInventory(player, "creative");
+		else
+			InventoryHandler.getInstance().saveInventory(player, "survival");
+	}
+
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+	public void onPlayerKick(PlayerKickEvent event) {
+		Player player = event.getPlayer();
+		if (!CreativePlus.worlds.contains(player.getWorld().getName()))
+			return;
+		if (PermissionManager.hasPerm(player, "creativeplus.sharedinv", false))
+			return;
+		if (player.getGameMode().equals(GameMode.CREATIVE))
+			InventoryHandler.getInstance().saveInventory(player, "creative");
+		else
+			InventoryHandler.getInstance().saveInventory(player, "survival");
 	}
 }
