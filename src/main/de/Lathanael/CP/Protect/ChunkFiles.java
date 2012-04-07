@@ -43,7 +43,6 @@ import de.Lathanael.BinaryFileDB.Exception.RecordsFileException;
  */
 public class ChunkFiles {
 
-	private static boolean loaded = false;
 	private static final String filePrefix = "chunks.";
 	private static SubDirFileFilter filter = new SubDirFileFilter();
 	private static String path;
@@ -54,7 +53,6 @@ public class ChunkFiles {
 	public static void initFiles(String path, String extension) {
 		ChunkFiles.path = path;
 		ChunkFiles.extension = extension;
-		loaded = true;
 		List<File> files= filter.getFiles(new File(path), filter.new PatternFilter(Type.FILE, extension), true);
 		existingFiles = new HashMap<String, File>((int) (files.size()/0.75) + 1);
 		String name;
@@ -68,8 +66,6 @@ public class ChunkFiles {
 	}
 
 	public static void closeFiles() {
-		if (!loaded)
-			return;
 		for (Map.Entry<String, DBAccess> entry : loadedDataBases.entrySet())
 			try {
 				entry.getValue().closeDB(false);

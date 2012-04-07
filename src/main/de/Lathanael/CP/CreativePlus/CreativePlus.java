@@ -49,6 +49,7 @@ import be.Balor.bukkit.AdminCmd.AbstractAdminCmdPlugin;
  */
 public class CreativePlus extends AbstractAdminCmdPlugin{
 
+	private boolean loaded = false;
 	private ExtendedConfiguration config;
 	public static List<String> worlds;
 	public static List<Integer> blBreak;
@@ -93,6 +94,7 @@ public class CreativePlus extends AbstractAdminCmdPlugin{
 			pm.registerEvents(new CPProtectPlayerListener(), this);
 		Plugin fileDB = pm.getPlugin("BinaryFileDB");
 		if (CPConfigEnum.PROTECT_BLOCKS.getBoolean() && fileDB != null && fileDB.isEnabled()) {
+			loaded = true;
 			ChunkFiles.initFiles(getDataFolder() + File.separator + "Blocks", ".blocks");
 			pm.registerEvents(new CPProtectBlockListener(), this);
 		} else if (CPConfigEnum.PROTECT_BLOCKS.getBoolean() && (fileDB == null || !fileDB.isEnabled())) {
@@ -114,7 +116,8 @@ public class CreativePlus extends AbstractAdminCmdPlugin{
 	 * @see org.bukkit.plugin.Plugin#onDisable()
 	 */
 	public void onDisable() {
-		ChunkFiles.closeFiles();
+		if (loaded)
+			ChunkFiles.closeFiles();
 		PluginDescriptionFile pdfFile = this.getDescription();
 		log.info("Disabled. (Version " + pdfFile.getVersion() + ")");
 	}
