@@ -41,6 +41,7 @@ public enum CPConfigEnum {
 	PROTECT_BLOCKS("ProtectedBlocks", false, "If set to true, all blocks placed in creative will be saved and can not be destroyed by a player in Survival mode."),
 	PROTECT_PLAYERS("ProtectedPlayers", true, "Setting this to true will make it impossible for creative players to attack survival players with hands or weapons."),
 	PROTECT_MOBS("ProtectedMobs", false, "If set tot true a creative player can not hurt mobs with weapons or bare handed."),
+	VERBOSE("verboseLog", false, "If set to true, CreativePlus will be a bit more verbose about what it does in the log."),
 	WROLDS("CreativeWorlds", Collections.list(new Enumeration<String>() {
 		private int count = 0;
 		private final String[] val = new String[] { "Creative1", "Creative2", "Creative3" };

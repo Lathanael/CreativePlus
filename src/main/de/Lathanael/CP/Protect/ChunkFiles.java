@@ -36,6 +36,8 @@ import de.Lathanael.BinaryFileDB.API.SubDirFileFilter.Type;
 import de.Lathanael.BinaryFileDB.Exception.CacheSizeException;
 import de.Lathanael.BinaryFileDB.Exception.QueueException;
 import de.Lathanael.BinaryFileDB.Exception.RecordsFileException;
+import de.Lathanael.CP.CreativePlus.CPConfigEnum;
+import de.Lathanael.CP.CreativePlus.CreativePlus;
 
 /**
  * @author Lathanael (aka Philippe Leipold)
@@ -57,10 +59,16 @@ public class ChunkFiles {
 		existingFiles = new HashMap<String, File>((int) (files.size()/0.75) + 1);
 		String name;
 		for (File file : files) {
+			if (CPConfigEnum.VERBOSE.getBoolean()) {
+				CreativePlus.log.info("Found database file: " + file.getName());
+			}
 			int lastDot = file.getName().lastIndexOf('.');
 			if (0 < lastDot && lastDot <= file.length()) {
 				name = file.getName().substring(0, lastDot);
 				existingFiles.put(name, file);
+				if (CPConfigEnum.VERBOSE.getBoolean()) {
+					CreativePlus.log.info("Added file to list: " + name);
+				}
 			}
 		}
 	}
@@ -105,8 +113,9 @@ public class ChunkFiles {
 					}
 				}
 			}
-			if (existingFiles.keySet().contains(newFileName))
+			if (existingFiles.keySet().contains(newFileName)) {
 				database = new DBAccess(existingFiles.get(newFileName).getPath(), "rw", true, 5);
+			}
 			else
 				database = new DBAccess(path + File.separator + newFileName + extension, 10, true, 5);
 			if (database != null) {
@@ -124,7 +133,6 @@ public class ChunkFiles {
 					RecordWriter rw = new RecordWriter(newChunkName);
 					rw.writeObject(blockSet);
 					database.writeRecord(rw);
-					return;
 				}
 				loadedDataBases.put(newFileName, database);
 				return;
@@ -133,7 +141,7 @@ public class ChunkFiles {
 			e.printStackTrace();
 			return;
 		} catch (RecordsFileException e) {
-			e.printStackTrace();
+			CreativePlus.log.severe(e.getMessage());
 			return;
 		} catch (CacheSizeException e) {
 			e.printStackTrace();

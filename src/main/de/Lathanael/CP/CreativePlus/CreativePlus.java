@@ -95,7 +95,7 @@ public class CreativePlus extends AbstractAdminCmdPlugin{
 		Plugin fileDB = pm.getPlugin("BinaryFileDB");
 		if (CPConfigEnum.PROTECT_BLOCKS.getBoolean() && fileDB != null && fileDB.isEnabled()) {
 			loaded = true;
-			ChunkFiles.initFiles(getDataFolder() + File.separator + "Blocks", ".blocks");
+			ChunkFiles.initFiles(getDataFolder() + File.separator + "Blocks", ".block");
 			pm.registerEvents(new CPProtectBlockListener(), this);
 		} else if (CPConfigEnum.PROTECT_BLOCKS.getBoolean() && (fileDB == null || !fileDB.isEnabled())) {
 			log.info("Plugin BinaryFileDB was not found or is disabled. Disabled BlockProtection.");
