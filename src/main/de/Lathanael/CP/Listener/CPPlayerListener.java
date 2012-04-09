@@ -15,7 +15,7 @@
  * along with CreativePlus.  If not, see <http://www.gnu.org/licenses/>.
  ************************************************************************/
 
-package de.Lathanael.CP.Listeners;
+package de.Lathanael.CP.Listener;
 
 import org.bukkit.GameMode;
 import org.bukkit.Material;

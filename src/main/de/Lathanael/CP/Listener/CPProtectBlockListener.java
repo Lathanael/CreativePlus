@@ -18,50 +18,58 @@
  *
  **************************************************************************/
 
-package de.Lathanael.CP.Listeners;
+package de.Lathanael.CP.Listener;
 
 import org.bukkit.GameMode;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerBucketEmptyEvent;
-import org.bukkit.event.player.PlayerBucketFillEvent;
-
-import de.Lathanael.CP.CreativePlus.CreativePlus;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
 
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Tools.Utils;
+
+import de.Lathanael.CP.CreativePlus.CreativePlus;
+import de.Lathanael.CP.Protect.ChunkBlockLocation;
+import de.Lathanael.CP.Protect.ChunkFiles;
 
 /**
  * @author Lathanael (aka Philippe Leipold)
  *
  */
-public class CPBucketListener implements Listener {
+public class CPProtectBlockListener implements Listener {
 
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-	public void PlayerBucketFillEvent(PlayerBucketFillEvent event) {
+	public void onBlockPlace(BlockPlaceEvent event) {
 		Player player = event.getPlayer();
 		if (!CreativePlus.worlds.contains(player.getWorld().getName()))
 			return;
 		if (player.getGameMode() != GameMode.CREATIVE)
 			return;
-		if (!PermissionManager.hasPerm(player, "creativeplus.usebucket", false)) {
-			event.setCancelled(true);
-			Utils.sI18n(player, "NoBucket");
-		}
+		Block b = event.getBlock();
+		int chunkX = b.getChunk().getX();
+		int chunkZ = b.getChunk().getZ();
+		ChunkBlockLocation cbl = new ChunkBlockLocation(b.getX(), b.getY(), b.getZ(), chunkX, chunkZ);
+		ChunkFiles.add(chunkX, chunkZ, cbl);
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-	public void PlayerBucketEmptyEvent(PlayerBucketEmptyEvent event) {
+	public void onBlockBreak(BlockBreakEvent event) {
 		Player player = event.getPlayer();
 		if (!CreativePlus.worlds.contains(player.getWorld().getName()))
 			return;
-		if (player.getGameMode() != GameMode.CREATIVE)
+		if (player.getGameMode() == GameMode.CREATIVE)
 			return;
-		if (!PermissionManager.hasPerm(player, "creativeplus.usebucket", false)) {
+		Block b = event.getBlock();
+		int chunkX = b.getChunk().getX();
+		int chunkZ = b.getChunk().getZ();
+		ChunkBlockLocation cbl = new ChunkBlockLocation(b.getX(), b.getY(), b.getZ(), chunkX, chunkZ);
+		if (ChunkFiles.isProtected(chunkX, chunkZ, cbl) && !PermissionManager.hasPerm(event.getPlayer(), "creativeplus.breakproteced", false)) {
 			event.setCancelled(true);
-			Utils.sI18n(player, "NoBucket");
+			Utils.sI18n(player, "ProtectedBlock");
 		}
 	}
 }

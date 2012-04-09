@@ -28,13 +28,13 @@ import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 
 import de.Lathanael.CP.Inventory.InventoryHandler;
-import de.Lathanael.CP.Listeners.CPBlockListener;
-import de.Lathanael.CP.Listeners.CPBucketListener;
-import de.Lathanael.CP.Listeners.CPInventoryListener;
-import de.Lathanael.CP.Listeners.CPPlayerListener;
-import de.Lathanael.CP.Listeners.CPProtectBlockListener;
-import de.Lathanael.CP.Listeners.CPProtectMobListerner;
-import de.Lathanael.CP.Listeners.CPProtectPlayerListener;
+import de.Lathanael.CP.Listener.CPBlockListener;
+import de.Lathanael.CP.Listener.CPBucketListener;
+import de.Lathanael.CP.Listener.CPInventoryListener;
+import de.Lathanael.CP.Listener.CPPlayerListener;
+import de.Lathanael.CP.Listener.CPProtectBlockListener;
+import de.Lathanael.CP.Listener.CPProtectMobListerner;
+import de.Lathanael.CP.Listener.CPProtectPlayerListener;
 import de.Lathanael.CP.Protect.ChunkFiles;
 
 import be.Balor.Manager.Permissions.PermParent;

@@ -18,7 +18,7 @@
  *
  **************************************************************************/
 
-package de.Lathanael.CP.Listeners;
+package de.Lathanael.CP.Listener;
 
 import org.bukkit.GameMode;
 import org.bukkit.entity.Entity;
