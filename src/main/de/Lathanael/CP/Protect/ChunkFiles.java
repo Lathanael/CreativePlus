@@ -138,7 +138,10 @@ public class ChunkFiles {
 				return;
 			}
 		} catch (IOException e) {
-			e.printStackTrace();
+			if (e.getMessage().contains("large"))
+				CreativePlus.log.severe(e.getMessage());
+			else
+				e.printStackTrace();
 			return;
 		} catch (RecordsFileException e) {
 			CreativePlus.log.severe(e.getMessage());
@@ -193,7 +196,10 @@ public class ChunkFiles {
 		} catch (RecordsFileException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
-			e.printStackTrace();
+			if (e.getMessage().contains("large"))
+				CreativePlus.log.severe(e.getMessage());
+			else
+				e.printStackTrace();
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} catch (CacheSizeException e) {
