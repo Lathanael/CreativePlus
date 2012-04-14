@@ -23,10 +23,10 @@ package de.Lathanael.CP.Protect;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.TreeSet;
 
 import de.Lathanael.BinaryFileDB.API.DBAccess;
 import de.Lathanael.BinaryFileDB.API.RecordReader;
@@ -85,6 +85,8 @@ public class ChunkFiles {
 	}
 
 	public static void add(int chunkX, int chunkZ, ChunkBlockLocation cbl) {
+		if (cbl == null)
+			return;
 		int fileExX = chunkX >> 3;
 		int fileExZ = chunkZ >> 3;
 		String newFileName = filePrefix + String.valueOf(fileExX) + "." + String.valueOf(fileExZ);
@@ -103,9 +105,9 @@ public class ChunkFiles {
 						database.writeRecord(rw);
 						return;
 					} else {
-						final HashSet<ChunkBlockLocation> blocks = new HashSet<ChunkBlockLocation>();
+						final TreeSet<ChunkBlockLocation> blocks = new TreeSet<ChunkBlockLocation>();
 						blocks.add(cbl);
-						CBLSet blockSet = new CBLSet(blocks);
+						CBLSet blockSet = new CBLSet(blocks, newChunkName);
 						RecordWriter rw = new RecordWriter(newChunkName);
 						rw.writeObject(blockSet);
 						database.writeRecord(rw);
@@ -127,11 +129,70 @@ public class ChunkFiles {
 					rw.writeObject(blocks);
 					database.writeRecord(rw);
 				} else {
-					final HashSet<ChunkBlockLocation> blocks = new HashSet<ChunkBlockLocation>();
+					final TreeSet<ChunkBlockLocation> blocks = new TreeSet<ChunkBlockLocation>();
 					blocks.add(cbl);
-					CBLSet blockSet = new CBLSet(blocks);
+					CBLSet blockSet = new CBLSet(blocks, newChunkName);
 					RecordWriter rw = new RecordWriter(newChunkName);
 					rw.writeObject(blockSet);
+					database.writeRecord(rw);
+				}
+				loadedDataBases.put(newFileName, database);
+				return;
+			}
+		} catch (IOException e) {
+			if (e.getMessage().contains("large"))
+				CreativePlus.log.severe(e.getMessage());
+			else
+				e.printStackTrace();
+			return;
+		} catch (RecordsFileException e) {
+			CreativePlus.log.severe(e.getMessage());
+			return;
+		} catch (CacheSizeException e) {
+			e.printStackTrace();
+			return;
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (QueueException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static void remove(int chunkX, int chunkZ, ChunkBlockLocation cbl) {
+		if (cbl == null)
+			return;
+		int fileExX = chunkX >> 3;
+		int fileExZ = chunkZ >> 3;
+		String newFileName = filePrefix + String.valueOf(fileExX) + "." + String.valueOf(fileExZ);
+		String newChunkName = "chunk." + String.valueOf(chunkX) + "." + String.valueOf(chunkZ);
+		DBAccess database = null;
+		try {
+			if (loadedDataBases.containsKey(newFileName)) {
+				database = loadedDataBases.get(newFileName);
+				if (database != null) {
+					RecordReader rr = database.getRecord(newChunkName);
+					if (rr != null) {
+						CBLSet blocks = (CBLSet) rr.readObject();
+						// TODO: remove code
+						RecordWriter rw = new RecordWriter(newChunkName);
+						rw.writeObject(blocks);
+						database.writeRecord(rw);
+						return;
+					}
+				}
+			}
+			if (existingFiles.keySet().contains(newFileName)) {
+				database = new DBAccess(existingFiles.get(newFileName).getPath(), "rw", true, 5);
+			}
+			else
+				database = new DBAccess(path + File.separator + newFileName + extension, 10, true, 5);
+			if (database != null) {
+				RecordReader rr = database.getRecord(newChunkName);
+				if (rr != null) {
+					CBLSet blocks = (CBLSet) rr.readObject();
+					// TODO: remove code
+					RecordWriter rw = new RecordWriter(newChunkName);
+					rw.writeObject(blocks);
 					database.writeRecord(rw);
 				}
 				loadedDataBases.put(newFileName, database);
