@@ -26,7 +26,7 @@ import java.io.Serializable;
  * @author Lathanael (aka Philippe Leipold)
  *
  */
-public class ChunkBlockLocation implements Serializable {
+public class ChunkBlockLocation implements Serializable, Comparable<ChunkBlockLocation> {
 
 	private static final long serialVersionUID = -7011023961320643404L;
 	private int x, y, z;
@@ -87,5 +87,39 @@ public class ChunkBlockLocation implements Serializable {
 		hc = hc*mult + chunkX;
 		hc = hc*mult + chunkZ;
 		return hc;
+	}
+
+	@Override
+	public int compareTo(ChunkBlockLocation o) {
+		final int BEFORE = -1;
+		final int EQUAL = 0;
+		final int AFTER = 1;
+
+		if (this == o)
+			return EQUAL;
+		if (this.x < o.x)
+			return AFTER;
+		if (this.x > o.x)
+			return BEFORE;
+		if (this.y < o.y)
+			return AFTER;
+		if (this.y > o.y)
+			return BEFORE;
+		if (this.z < o.z)
+			return AFTER;
+		if (this.z > o.z)
+			return BEFORE;
+		if (this.chunkX < o.chunkX)
+			return AFTER;
+		if (this.chunkX > o.chunkX)
+			return BEFORE;
+		if (this.chunkZ < o.chunkZ)
+			return AFTER;
+		if (this.chunkZ > o.chunkZ)
+			return BEFORE;
+
+		assert this.equals(o) : "compareTo inconsistent with equals.";
+
+		return EQUAL;
 	}
 }

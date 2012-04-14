@@ -21,7 +21,7 @@
 package de.Lathanael.CP.Protect;
 
 import java.io.Serializable;
-import java.util.HashSet;
+import java.util.TreeSet;
 
 /**
  * @author Lathanael (aka Philippe Leipold)
@@ -29,15 +29,35 @@ import java.util.HashSet;
  */
 public class CBLSet implements Serializable {
 
-	private HashSet<ChunkBlockLocation> blocks = new HashSet<ChunkBlockLocation>();
+	private TreeSet<ChunkBlockLocation> blocks = new TreeSet<ChunkBlockLocation>();
+	private String key;
 
 	private static final long serialVersionUID = -3877731953197835237L;
 
-	public CBLSet (HashSet<ChunkBlockLocation> blocks) {
+	public CBLSet (TreeSet<ChunkBlockLocation> blocks, String key) {
 		this.blocks = blocks;
+		this.key = key;
 	}
 
-	public HashSet<ChunkBlockLocation> getBlocks() {
+	public TreeSet<ChunkBlockLocation> getBlocks() {
 		return blocks;
 	}
+
+	public String getKey() {
+		return key;
+	}
+
+/*	@Override
+	public int compareTo(CBLSet o) {
+		if (o.getKey() == null && this.getKey() == null) {
+			return 0;
+		}
+		if (this.getKey() == null) {
+			return 1;
+		}
+		if (o.getKey() == null) {
+			return -1;
+		}
+		return this.getKey().compareTo(o.getKey());
+	}*/
 }
