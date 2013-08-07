@@ -34,8 +34,8 @@ import org.bukkit.event.player.PlayerPickupItemEvent;
 
 import de.Lathanael.CP.CreativePlus.CPConfigEnum;
 import de.Lathanael.CP.CreativePlus.CreativePlus;
+import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Permissions.PermissionManager;
-import be.Balor.Tools.Utils;
 
 /**
  * @author Lathanael (aka Philippe Leipold)
@@ -71,7 +71,7 @@ public class CPPlayerListener implements Listener {
 		if (PermissionManager.hasPerm(player, "creativeplus.dropitems", false))
 			return;
 		event.setCancelled(true);
-		Utils.sI18n(player, "NoItemsDrop");
+		LocaleManager.sI18n(player, "NoItemsDrop");
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)

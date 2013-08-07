@@ -20,6 +20,8 @@
 
 package de.Lathanael.CP.Listener;
 
+import java.io.EOFException;
+import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -29,9 +31,11 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 
+import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Permissions.PermissionManager;
 import be.Balor.Tools.Utils;
 
+import de.Lathanael.CP.CreativePlus.CPConfigEnum;
 import de.Lathanael.CP.CreativePlus.CreativePlus;
 import de.Lathanael.CP.Protect.ChunkBlockLocation;
 import de.Lathanael.CP.Protect.ChunkFiles;
@@ -67,9 +71,19 @@ public class CPProtectBlockListener implements Listener {
 		int chunkX = b.getChunk().getX();
 		int chunkZ = b.getChunk().getZ();
 		ChunkBlockLocation cbl = new ChunkBlockLocation(b.getX(), b.getY(), b.getZ(), chunkX, chunkZ);
-		if (ChunkFiles.isProtected(chunkX, chunkZ, cbl) && !PermissionManager.hasPerm(event.getPlayer(), "creativeplus.breakproteced", false)) {
-			event.setCancelled(true);
-			Utils.sI18n(player, "ProtectedBlock");
+		try {
+			if (ChunkFiles.isProtected(chunkX, chunkZ, cbl) && !PermissionManager.hasPerm(event.getPlayer(), "creativeplus.breakproteced", false)) {
+				event.setCancelled(true);
+				LocaleManager.sI18n(player, "ProtectedBlock");
+			}
+		} catch (EOFException e) {
+				CreativePlus.log.warning("Database is most probably corrupted.");
+				CreativePlus.log.warning(e.getMessage());
+				if (CPConfigEnum.VERBOSE.getBoolean())
+					e.printStackTrace();
+				CreativePlus.log.warning("Protecting all blocks in the affected area to prevent loss of data!");
+				event.setCancelled(true);
+				player.sendMessage(ChatColor.RED + "All blocks in this chunk are proteced due to a corrupted datatbase, please inform a server admin!");
 		}
 	}
 }

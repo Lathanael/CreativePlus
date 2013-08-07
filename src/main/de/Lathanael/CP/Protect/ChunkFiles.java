@@ -20,14 +20,16 @@
 
 package de.Lathanael.CP.Protect;
 
+import java.io.EOFException;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-import java.util.TreeSet;
-
 import de.Lathanael.BinaryFileDB.API.DBAccess;
 import de.Lathanael.BinaryFileDB.API.RecordReader;
 import de.Lathanael.BinaryFileDB.API.RecordWriter;
@@ -50,7 +52,7 @@ public class ChunkFiles {
 	private static String path;
 	private static String extension;
 	private static HashMap<String, File> existingFiles;
-	private static TreeMap<String, DBAccess> loadedDataBases = new TreeMap<String, DBAccess>();
+	private static final TreeMap<String, DBAccess> loadedDataBases = new TreeMap<String, DBAccess>();
 
 	public static void initFiles(String path, String extension) {
 		ChunkFiles.path = path;
@@ -81,66 +83,122 @@ public class ChunkFiles {
 				e.printStackTrace();
 			} catch (RecordsFileException e) {
 				e.printStackTrace();
+			} catch (IllegalArgumentException e) {
+				if (e.getMessage() != null )
+					CreativePlus.log.severe(e.getMessage());
+				else
+					e.printStackTrace();
 			}
 	}
 
-	public static void add(int chunkX, int chunkZ, ChunkBlockLocation cbl) {
+	public static void add(final int chunkX, final int chunkZ, final ChunkBlockLocation cbl) {
 		if (cbl == null)
 			return;
-		int fileExX = chunkX >> 3;
-		int fileExZ = chunkZ >> 3;
-		String newFileName = filePrefix + String.valueOf(fileExX) + "." + String.valueOf(fileExZ);
-		String newChunkName = "chunk." + String.valueOf(chunkX) + "." + String.valueOf(chunkZ);
+		final int fileExX = chunkX >> 3;
+			final int fileExZ = chunkZ >> 3;
+		final String newFileName = filePrefix + String.valueOf(fileExX) + "." + String.valueOf(fileExZ);
+		final String newChunkName = "chunk." + String.valueOf(chunkX) + "." + String.valueOf(chunkZ);
+		File file = new File(path, newChunkName + extension +"s");
 		DBAccess database = null;
 		try {
 			if (loadedDataBases.containsKey(newFileName)) {
+				if (CPConfigEnum.VERBOSE.getBoolean())
+					CreativePlus.log.info("Writing to already loaded Database...");
 				database = loadedDataBases.get(newFileName);
 				if (database != null) {
-					RecordReader rr = database.getRecord(newChunkName);
+					final RecordReader rr = database.getRecord(newChunkName);
 					if (rr != null) {
-						CBLSet blocks = (CBLSet) rr.readObject();
+						final Object o = rr.readObject();
+						final CBLSet blocks = (CBLSet) o;
 						blocks.getBlocks().add(cbl);
-						RecordWriter rw = new RecordWriter(newChunkName);
+						final RecordWriter rw = new RecordWriter(newChunkName);
 						rw.writeObject(blocks);
 						database.writeRecord(rw);
+						FileOutputStream fos = null;
+						ObjectOutputStream out = null;
+						try {
+							fos = new FileOutputStream(file);
+							out = new ObjectOutputStream(fos);
+							out.writeObject(blocks);
+							out.close();
+						} catch(IOException e) {
+							e.printStackTrace();
+						}
 						return;
 					} else {
-						final TreeSet<ChunkBlockLocation> blocks = new TreeSet<ChunkBlockLocation>();
+						final HashSet<ChunkBlockLocation> blocks = new HashSet<ChunkBlockLocation>();
 						blocks.add(cbl);
-						CBLSet blockSet = new CBLSet(blocks, newChunkName);
-						RecordWriter rw = new RecordWriter(newChunkName);
+						final CBLSet blockSet = new CBLSet(blocks, newChunkName);
+						final RecordWriter rw = new RecordWriter(newChunkName);
 						rw.writeObject(blockSet);
 						database.writeRecord(rw);
+						FileOutputStream fos = null;
+						ObjectOutputStream out = null;
+						try {
+							fos = new FileOutputStream(file);
+							out = new ObjectOutputStream(fos);
+							out.writeObject(blocks);
+							out.close();
+						} catch(IOException e) {
+							e.printStackTrace();
+						}
 						return;
 					}
 				}
 			}
+			if (CPConfigEnum.VERBOSE.getBoolean())
+				CreativePlus.log.info("Database not loaded, check for existance..");
 			if (existingFiles.keySet().contains(newFileName)) {
+				if (CPConfigEnum.VERBOSE.getBoolean())
+					CreativePlus.log.info("Database found, loading it...");
 				database = new DBAccess(existingFiles.get(newFileName).getPath(), "rw", true, 5);
-			}
-			else
+			} else {
+				if (CPConfigEnum.VERBOSE.getBoolean())
+					CreativePlus.log.info("No Database found, creating a new one...");
 				database = new DBAccess(path + File.separator + newFileName + extension, 10, true, 5);
+			}
 			if (database != null) {
-				RecordReader rr = database.getRecord(newChunkName);
+				final RecordReader rr = database.getRecord(newChunkName);
 				if (rr != null) {
-					CBLSet blocks = (CBLSet) rr.readObject();
+					final Object o = rr.readObject();
+					final CBLSet blocks = (CBLSet) o;
 					blocks.getBlocks().add(cbl);
-					RecordWriter rw = new RecordWriter(newChunkName);
+					final RecordWriter rw = new RecordWriter(newChunkName);
 					rw.writeObject(blocks);
 					database.writeRecord(rw);
+					FileOutputStream fos = null;
+					ObjectOutputStream out = null;
+					try {
+						fos = new FileOutputStream(file);
+						out = new ObjectOutputStream(fos);
+						out.writeObject(blocks);
+						out.close();
+					} catch(IOException e) {
+						e.printStackTrace();
+					}
 				} else {
-					final TreeSet<ChunkBlockLocation> blocks = new TreeSet<ChunkBlockLocation>();
+					final HashSet<ChunkBlockLocation> blocks = new HashSet<ChunkBlockLocation>();
 					blocks.add(cbl);
-					CBLSet blockSet = new CBLSet(blocks, newChunkName);
-					RecordWriter rw = new RecordWriter(newChunkName);
+					final CBLSet blockSet = new CBLSet(blocks, newChunkName);
+					final RecordWriter rw = new RecordWriter(newChunkName);
 					rw.writeObject(blockSet);
 					database.writeRecord(rw);
+					FileOutputStream fos = null;
+					ObjectOutputStream out = null;
+					try {
+						fos = new FileOutputStream(file);
+						out = new ObjectOutputStream(fos);
+						out.writeObject(blocks);
+						out.close();
+					} catch(IOException e) {
+						e.printStackTrace();
+					}
 				}
 				loadedDataBases.put(newFileName, database);
 				return;
 			}
 		} catch (IOException e) {
-			if (e.getMessage().contains("large"))
+			if (e.getMessage() != null && e.getMessage().contains("large"))
 				CreativePlus.log.severe(e.getMessage());
 			else
 				e.printStackTrace();
@@ -155,26 +213,32 @@ public class ChunkFiles {
 			e.printStackTrace();
 		} catch (QueueException e) {
 			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			if (e.getMessage() != null)
+				CreativePlus.log.severe(e.getMessage());
+			else
+				e.printStackTrace();
 		}
 	}
 
-	public static void remove(int chunkX, int chunkZ, ChunkBlockLocation cbl) {
+	public static void remove(final int chunkX, final int chunkZ,  final ChunkBlockLocation cbl) {
 		if (cbl == null)
 			return;
-		int fileExX = chunkX >> 3;
-		int fileExZ = chunkZ >> 3;
-		String newFileName = filePrefix + String.valueOf(fileExX) + "." + String.valueOf(fileExZ);
-		String newChunkName = "chunk." + String.valueOf(chunkX) + "." + String.valueOf(chunkZ);
+		final int fileExX = chunkX >> 3;
+		final int fileExZ = chunkZ >> 3;
+		final String newFileName = filePrefix + String.valueOf(fileExX) + "." + String.valueOf(fileExZ);
+		final String newChunkName = "chunk." + String.valueOf(chunkX) + "." + String.valueOf(chunkZ);
 		DBAccess database = null;
 		try {
 			if (loadedDataBases.containsKey(newFileName)) {
 				database = loadedDataBases.get(newFileName);
 				if (database != null) {
-					RecordReader rr = database.getRecord(newChunkName);
+					final RecordReader rr = database.getRecord(newChunkName);
 					if (rr != null) {
-						CBLSet blocks = (CBLSet) rr.readObject();
+						final Object o = rr.readObject();
+						final CBLSet blocks = (CBLSet) o;
 						// TODO: remove code
-						RecordWriter rw = new RecordWriter(newChunkName);
+						final RecordWriter rw = new RecordWriter(newChunkName);
 						rw.writeObject(blocks);
 						database.writeRecord(rw);
 						return;
@@ -187,11 +251,11 @@ public class ChunkFiles {
 			else
 				database = new DBAccess(path + File.separator + newFileName + extension, 10, true, 5);
 			if (database != null) {
-				RecordReader rr = database.getRecord(newChunkName);
+				final RecordReader rr = database.getRecord(newChunkName);
 				if (rr != null) {
-					CBLSet blocks = (CBLSet) rr.readObject();
+					final CBLSet blocks = (CBLSet) rr.readObject();
 					// TODO: remove code
-					RecordWriter rw = new RecordWriter(newChunkName);
+					final RecordWriter rw = new RecordWriter(newChunkName);
 					rw.writeObject(blocks);
 					database.writeRecord(rw);
 				}
@@ -199,7 +263,7 @@ public class ChunkFiles {
 				return;
 			}
 		} catch (IOException e) {
-			if (e.getMessage().contains("large"))
+			if (e.getMessage() != null && e.getMessage().contains("large"))
 				CreativePlus.log.severe(e.getMessage());
 			else
 				e.printStackTrace();
@@ -214,25 +278,32 @@ public class ChunkFiles {
 			e.printStackTrace();
 		} catch (QueueException e) {
 			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			if (e.getMessage() != null)
+				CreativePlus.log.severe(e.getMessage());
+			else
+				e.printStackTrace();
 		}
 	}
 
-	public static boolean isProtected(int chunkX, int chunkZ, ChunkBlockLocation cbl) {
+	public static boolean isProtected(final int chunkX, final int chunkZ, final ChunkBlockLocation cbl) throws EOFException {
 		if (cbl == null)
 			return false;
-		int fileExX = chunkX >> 3;
-		int fileExZ = chunkZ >> 3;
-		String newFileName = filePrefix + String.valueOf(fileExX) + "." + String.valueOf(fileExZ);
-		String newChunkName = "chunk." + String.valueOf(chunkX) + "." + String.valueOf(chunkZ);
+		final int fileExX = chunkX >> 3;
+		final int fileExZ = chunkZ >> 3;
+		final String newFileName = filePrefix + String.valueOf(fileExX) + "." + String.valueOf(fileExZ);
+		final String newChunkName = "chunk." + String.valueOf(chunkX) + "." + String.valueOf(chunkZ);
 		DBAccess database = null;
 		try {
 			if (loadedDataBases.containsKey(newFileName)) {
+				if (CPConfigEnum.VERBOSE.getBoolean())
+					CreativePlus.log.info("Reading from already loaded Database...");
 				database = loadedDataBases.get(newFileName);
 				if (database != null) {
-					RecordReader rr;
-					rr = database.getRecord(newChunkName);
+					final RecordReader rr = database.getRecord(newChunkName);
 					if (rr != null) {
-						CBLSet blocks = (CBLSet) rr.readObject();
+						final Object o = rr.readObject();
+						final CBLSet blocks = (CBLSet) o;
 						if (blocks == null)
 							return false;
 						return blocks.getBlocks().contains(cbl);
@@ -240,12 +311,16 @@ public class ChunkFiles {
 						return false;
 				}
 			} else if (existingFiles.keySet().contains(newFileName)) {
+				if (CPConfigEnum.VERBOSE.getBoolean())
+					CreativePlus.log.info("Database not loaded but exists, loading and reading it now....");
 				database = new DBAccess(existingFiles.get(newFileName).getPath(), "rw", true, 5);
 				if (database != null) {
-					RecordReader rr;
-					rr = database.getRecord(newChunkName);
+					if (!loadedDataBases.containsKey(newFileName))
+						loadedDataBases.put(newFileName, database);
+					final RecordReader rr = database.getRecord(newChunkName);
 					if (rr != null) {
-						CBLSet blocks = (CBLSet) rr.readObject();
+						final Object o = rr.readObject();
+						final CBLSet blocks = (CBLSet) o;
 						if (blocks == null)
 							return false;
 						return blocks.getBlocks().contains(cbl);
@@ -257,7 +332,12 @@ public class ChunkFiles {
 		} catch (RecordsFileException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
-			if (e.getMessage().contains("large"))
+			if (e instanceof EOFException) {
+				EOFException ex = new EOFException("Affected file: " + newFileName
+						+ ", affected entry: " + newChunkName);
+				ex.setStackTrace(e.getStackTrace());
+				throw ex;
+			} if (e.getMessage() != null && e.getMessage().contains("large"))
 				CreativePlus.log.severe(e.getMessage());
 			else
 				e.printStackTrace();
@@ -265,6 +345,11 @@ public class ChunkFiles {
 			e.printStackTrace();
 		} catch (CacheSizeException e) {
 			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			if (e.getMessage() != null)
+				CreativePlus.log.severe(e.getMessage());
+			else
+				e.printStackTrace();
 		}
 		return false;
 	}

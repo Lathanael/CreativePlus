@@ -96,7 +96,9 @@ public class InventoryHandler {
 			fis = new FileInputStream(playerFile);
 			oit = new ObjectInputStream(fis);
 			inv = (CPInventory) oit.readObject();
+			oit.close();
 		} catch (EOFException e) {
+			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {

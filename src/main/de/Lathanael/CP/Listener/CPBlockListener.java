@@ -28,9 +28,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 
+import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Permissions.PermissionManager;
-import be.Balor.Tools.Utils;
-
 import de.Lathanael.CP.CreativePlus.CreativePlus;
 
 /**
@@ -54,7 +53,7 @@ public class CPBlockListener implements Listener {
 		event.setCancelled(true);
 		HashMap<String, String> replace = new HashMap<String, String>();
 		replace.put("block", Material.getMaterial(blockID).toString());
-		Utils.sI18n(player, "blacklisted", replace);
+		LocaleManager.sI18n(player, "blacklisted", replace);
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)

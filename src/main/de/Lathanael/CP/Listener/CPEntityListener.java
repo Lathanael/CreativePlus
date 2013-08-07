@@ -27,9 +27,8 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
 
+import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Permissions.PermissionManager;
-import be.Balor.Tools.Utils;
-
 import de.Lathanael.CP.CreativePlus.CPConfigEnum;
 import de.Lathanael.CP.CreativePlus.CreativePlus;
 
@@ -52,7 +51,7 @@ public class CPEntityListener implements Listener {
 			return;
 		if (p.getGameMode() == GameMode.CREATIVE) {
 			event.getDrops().clear();
-			Utils.sI18n(p, "NoDeathDrop");
+			LocaleManager.sI18n(p, "NoDeathDrop");
 		}
 	}
 }

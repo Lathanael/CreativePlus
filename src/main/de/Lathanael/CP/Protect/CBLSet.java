@@ -21,7 +21,7 @@
 package de.Lathanael.CP.Protect;
 
 import java.io.Serializable;
-import java.util.TreeSet;
+import java.util.HashSet;
 
 /**
  * @author Lathanael (aka Philippe Leipold)
@@ -29,17 +29,22 @@ import java.util.TreeSet;
  */
 public class CBLSet implements Serializable {
 
-	private TreeSet<ChunkBlockLocation> blocks = new TreeSet<ChunkBlockLocation>();
+	private HashSet<ChunkBlockLocation> blocks = new HashSet<ChunkBlockLocation>();
 	private String key;
 
 	private static final long serialVersionUID = -3877731953197835237L;
 
-	public CBLSet (TreeSet<ChunkBlockLocation> blocks, String key) {
+	public CBLSet(final HashSet<ChunkBlockLocation> blocks, final String key, boolean n) {
+		this.key = key;
 		this.blocks = blocks;
+	}
+
+	public CBLSet(final HashSet<ChunkBlockLocation> blocks, final String key) {
+		this.blocks.addAll(blocks);
 		this.key = key;
 	}
 
-	public TreeSet<ChunkBlockLocation> getBlocks() {
+	public HashSet<ChunkBlockLocation> getBlocks() {
 		return blocks;
 	}
 
@@ -47,17 +52,26 @@ public class CBLSet implements Serializable {
 		return key;
 	}
 
-/*	@Override
-	public int compareTo(CBLSet o) {
-		if (o.getKey() == null && this.getKey() == null) {
-			return 0;
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (obj.getClass() == getClass()) {
+			if(((CBLSet) obj).key.equals(this.key) &&
+					((CBLSet) obj).blocks.equals(this.blocks))
+				return true;
 		}
-		if (this.getKey() == null) {
-			return 1;
-		}
-		if (o.getKey() == null) {
-			return -1;
-		}
-		return this.getKey().compareTo(o.getKey());
-	}*/
+		return false;
+	}
+
+	@Override
+	public int hashCode() {
+		int hc = 47;
+		int mult = 73;
+		hc = hc*mult + key.hashCode();
+		hc = hc*mult + blocks.hashCode();
+		return hc;
+	}
 }

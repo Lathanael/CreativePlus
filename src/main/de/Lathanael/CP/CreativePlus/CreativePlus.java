@@ -37,8 +37,8 @@ import de.Lathanael.CP.Listener.CPProtectMobListerner;
 import de.Lathanael.CP.Listener.CPProtectPlayerListener;
 import de.Lathanael.CP.Protect.ChunkFiles;
 
+import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Permissions.PermParent;
-import be.Balor.Tools.Utils;
 import be.Balor.Tools.Configuration.File.ExtendedConfiguration;
 import be.Balor.bukkit.AdminCmd.ACPluginManager;
 import be.Balor.bukkit.AdminCmd.AbstractAdminCmdPlugin;
@@ -145,12 +145,12 @@ public class CreativePlus extends AbstractAdminCmdPlugin{
 
 	@Override
 	protected void setDefaultLocale() {
-		Utils.addLocale("NoItemsDrop", ChatColor.RED + "You are not allowed to drop items/blocks while beeing in creative mode!");
-		Utils.addLocale("blacklisted", ChatColor.GOLD + "%block " + ChatColor.RED
+		LocaleManager.getInstance().addLocale("NoItemsDrop", ChatColor.RED + "You are not allowed to drop items/blocks while beeing in creative mode!");
+		LocaleManager.getInstance().addLocale("blacklisted", ChatColor.GOLD + "%block " + ChatColor.RED
 				+ "is blacklisted and you are not allowed to place it");
-		Utils.addLocale("NoDeathDrop", ChatColor.RED + "You are not allowed to drop items/blocks on death while beeing in creative mode!");
-		Utils.addLocale("NoItemPickUp", ChatColor.RED + "You are not allowed to pick up items/blocks while beeing in creative mode!");
-		Utils.addLocale("NoBucket", "You are not allowed to empty Buckets while you are in creative mode.");
-		Utils.addLocale("ProtectedBlock", "The block is protected as it was placed by a creative player.");
+		LocaleManager.getInstance().addLocale("NoDeathDrop", ChatColor.RED + "You are not allowed to drop items/blocks on death while beeing in creative mode!");
+		LocaleManager.getInstance().addLocale("NoItemPickUp", ChatColor.RED + "You are not allowed to pick up items/blocks while beeing in creative mode!");
+		LocaleManager.getInstance().addLocale("NoBucket", ChatColor.RED + "You are not allowed to empty Buckets while you are in creative mode.");
+		LocaleManager.getInstance().addLocale("ProtectedBlock", ChatColor.RED + "The block is protected as it was placed by a creative player.");
 	}
 }

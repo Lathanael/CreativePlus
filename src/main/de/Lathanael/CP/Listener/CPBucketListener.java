@@ -30,8 +30,8 @@ import org.bukkit.event.player.PlayerBucketFillEvent;
 
 import de.Lathanael.CP.CreativePlus.CreativePlus;
 
+import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Permissions.PermissionManager;
-import be.Balor.Tools.Utils;
 
 /**
  * @author Lathanael (aka Philippe Leipold)
@@ -48,7 +48,7 @@ public class CPBucketListener implements Listener {
 			return;
 		if (!PermissionManager.hasPerm(player, "creativeplus.usebucket", false)) {
 			event.setCancelled(true);
-			Utils.sI18n(player, "NoBucket");
+			LocaleManager.sI18n(player, "NoBucket");
 		}
 	}
 
@@ -61,7 +61,7 @@ public class CPBucketListener implements Listener {
 			return;
 		if (!PermissionManager.hasPerm(player, "creativeplus.usebucket", false)) {
 			event.setCancelled(true);
-			Utils.sI18n(player, "NoBucket");
+			LocaleManager.sI18n(player, "NoBucket");
 		}
 	}
 }
