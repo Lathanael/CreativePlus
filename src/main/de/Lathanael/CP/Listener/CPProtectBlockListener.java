@@ -33,8 +33,6 @@ import org.bukkit.event.block.BlockPlaceEvent;
 
 import be.Balor.Manager.LocaleManager;
 import be.Balor.Manager.Permissions.PermissionManager;
-import be.Balor.Tools.Utils;
-
 import de.Lathanael.CP.CreativePlus.CPConfigEnum;
 import de.Lathanael.CP.CreativePlus.CreativePlus;
 import de.Lathanael.CP.Protect.ChunkBlockLocation;
